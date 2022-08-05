@@ -1,0 +1,26 @@
+{
+    "name": "arendsen/fluxquerybuilder",
+    "description": "Generating Flux queries",
+    "keywords": [
+        "influxdb",
+        "flux"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David Arendsen",
+            "email": "davidarendsen@hey.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Arendsen\\FluxQueryBuilder\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+		"phpunit/phpunit": "^8"
+	}
+}
