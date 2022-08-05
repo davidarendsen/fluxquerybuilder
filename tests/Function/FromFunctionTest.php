@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Arendsen\FluxQueryBuilder\Function\From;
 use PHPUnit\Framework\TestCase;
 
-final class FromExpressionTest extends TestCase {
+final class FromFunctionTest extends TestCase {
 
     /**
      * @dataProvider somethingProvider
