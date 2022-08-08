@@ -7,31 +7,65 @@ use Arendsen\FluxQueryBuilder\QueryBuilder;
 final class QueryBuilderTest extends TestCase {
 
     /**
-     * @dataProvider somethingProvider
+     * @dataProvider simpleQueryProvider
      */
-    public function testSomething($bucket, $measurement, $range, $expectedQuery)
+    public function testSimpleQuery($bucket, $measurement, $range, $expectedQuery)
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->from($bucket)
             ->fromMeasurement($measurement)
 			->addRangeStart($range);
 
-        $this->assertEquals($queryBuilder->build(), $expectedQuery);
+        $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
 
-    public function somethingProvider(): array
+    public function simpleQueryProvider(): array
     {
         return [
             'case 1' => [
                 [
-                    'bucket' => 'example-bucket', 
-                    'host' => 'host', 
-                    'org' => 'example-org', 
-                    'token' => 'token'
+                    'bucket' => 'example_bucket',
                 ],
                 'test_measurement',
                 '-360h',
-                'from(bucket: "test_bucket", host: "host", org: "example-org", token: "token") |> '
+                'from(bucket: "example_bucket") |> range(start: "-360h") |> filter(fn: (r) => r._measurement == "test_measurement") '
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider throwsExceptionWithoutRequiredDataProvider
+     */
+    public function testThrowsExceptionWithoutRequiredData($from, $measurement, $range)
+    {
+        $this->expectException(Exception::class);
+
+        $queryBuilder = new QueryBuilder();
+
+        if($from) {
+            $queryBuilder->from($from);
+        }
+        if($measurement) {
+            $queryBuilder->fromMeasurement($measurement);
+        }
+        if($range) {
+            $queryBuilder->addRange($range);
+        }
+
+        $queryBuilder->build();
+    }
+
+    public function throwsExceptionWithoutRequiredDataProvider(): array
+    {
+        return [
+            'without from data' => [
+                null, 'test_measurement', ['start' => '-360h'],
+            ],
+            'without measurement data' => [
+                ['from' => 'test_bucket'], null, ['start' => '-360h'],
+            ],
+            'without range data' => [
+                ['from' => 'test_bucket'], 'test_measurement', null,
             ],
         ];
     }

@@ -2,21 +2,23 @@
 
 namespace Arendsen\FluxQueryBuilder\Function;
 
+use Arendsen\FluxQueryBuilder\Expression\KeyValue;
+
 class Filter extends Base {
 
     /**
-     * @var array $settings
+     * @var KeyValue $keyValue
      */
-    private $settings;
+    private $keyValue;
 
-    public function __construct(array $settings)
+    public function __construct(KeyValue $keyValue)
     {
-        $this->settings = $settings;
+        $this->keyValue = $keyValue;
     }
 
     public function __toString()
     {
-        return '|> filter(fn: (r) => ' . implode(' ', $this->settings) . ') ';
+        return '|> filter(fn: (r) => ' . $this->keyValue . ') ';
     }
 
 }
