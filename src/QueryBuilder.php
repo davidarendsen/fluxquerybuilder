@@ -14,44 +14,51 @@ class QueryBuilder {
     const FLUX_PART_RANGE = 'range';
     const FLUX_PART_FILTERS = 'filters';
 
+    const PARTS = [
+        self::FLUX_PART_FROM,
+        self::FLUX_PART_RANGE,
+        self::FLUX_PART_FILTERS
+    ];
+
+    const REQUIRED_INPUT_FROM = 'from';
+    const REQUIRED_INPUT_MEASUREMENT = 'measurement';
+    const REQUIRED_INPUT_RANGE = 'range';
+
+    const REQUIRED_INPUT = [
+        self::REQUIRED_INPUT_FROM,
+        self::REQUIRED_INPUT_MEASUREMENT,
+        self::REQUIRED_INPUT_RANGE,
+    ];
+
     /**
      * @var array $fluxQuery
      */
     private $fluxQueryParts = [];
 
     /**
-     * @var array $from
+     * @var array $requiredData
      */
-    private $from;
-
-    /**
-     * @var string $measurement
-     */
-    private $measurement;
-
-    /**
-     * @var array $range
-     */
-    private $range;
+    private $requiredData = [];
     
     public function from(array $from): QueryBuilder
     {
-        $this->from = $from;
+        $this->addRequiredData(self::REQUIRED_INPUT_FROM, $from);
         $this->addToQuery(
             self::FLUX_PART_FROM,
-            new From($this->from)
+            new From($from)
         );
         return $this;
     }
 
-    public function fromBucket(string $bucket): QueryBuilder {
+    public function fromBucket(string $bucket): QueryBuilder
+    {
         $this->from(['bucket' => $bucket]);
         return $this;
     }
 
     public function fromMeasurement(string $measurement): QueryBuilder
     {
-        $this->measurement = $measurement;
+        $this->addRequiredData(self::REQUIRED_INPUT_MEASUREMENT, $measurement);
         $this->addToQueryArray(
             self::FLUX_PART_FILTERS,
             new Filter(KeyValue::set('_measurement', $measurement))
@@ -59,9 +66,18 @@ class QueryBuilder {
         return $this;
     }
 
+    public function addFilter(KeyValue $keyValue): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_FILTERS,
+            new Filter($keyValue)
+        );
+        return $this;
+    }
+
     public function addRange(array $range): QueryBuilder
     {
-        $this->range = $range;
+        $this->addRequiredData(self::REQUIRED_INPUT_RANGE, $range);
         $this->addToQuery(
             self::FLUX_PART_RANGE,
             new Range($range)
@@ -91,41 +107,37 @@ class QueryBuilder {
 
         $query = '';
 
-        if(isset($this->fluxQueryParts[self::FLUX_PART_FROM])) {
-            $query .= $this->fluxQueryParts[self::FLUX_PART_FROM];
-        }
-
-        if(isset($this->fluxQueryParts[self::FLUX_PART_RANGE])) {
-            $query .= $this->fluxQueryParts[self::FLUX_PART_RANGE];
-        }
-
-        if(isset($this->fluxQueryParts[self::FLUX_PART_FILTERS])) {
-            foreach($this->fluxQueryParts[self::FLUX_PART_FILTERS] as $filter) {
-                $query .= $filter;
+        foreach(self::PARTS as $part)
+        {
+            if(isset($this->fluxQueryParts[$part]))
+            {
+                if(is_array($this->fluxQueryParts[$part]))
+                {
+                    foreach($this->fluxQueryParts[$part] as $filter) {
+                        $query .= $filter;
+                    }
+                }
+                else
+                {
+                    $query .= $this->fluxQueryParts[$part];
+                }
             }
         }
 
         return $query;
+    }
 
-        //TODO: build the query dynamically here
-        return 'from(bucket: "test_bucket") |> ';
+    protected function addRequiredData(string $key, $value) {
+        $this->requiredData[$key] = $value;
     }
 
     protected function checkRequired()
     {
-        if(!$this->from)
-        {
-            throw new Exception('You need to define the from part of the query!');
-        }
-
-        if(!$this->measurement)
-        {
-            throw new Exception('You need to define the measurement of the query!');
-        }
-
-        if(!$this->range)
-        {
-            throw new Exception('You need to define the range part of the query!');
+        foreach(self::REQUIRED_INPUT as $input) {
+            if(!isset($this->requiredData[$input]))
+            {
+                throw new Exception('You need to define the "' . $input . '" part of the query!');
+            }
         }
     }
 
