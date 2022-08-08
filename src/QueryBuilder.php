@@ -6,6 +6,7 @@ use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use Arendsen\FluxQueryBuilder\Function\Filter;
 use Arendsen\FluxQueryBuilder\Function\From;
 use Arendsen\FluxQueryBuilder\Function\Range;
+use Arendsen\FluxQueryBuilder\Function\Reduce;
 use Exception;
 
 class QueryBuilder {
@@ -13,10 +14,12 @@ class QueryBuilder {
     const FLUX_PART_FROM = 'from';
     const FLUX_PART_RANGE = 'range';
     const FLUX_PART_FILTERS = 'filters';
+    const FLUX_PART_REDUCE = 'reduce';
 
     const PARTS = [
         self::FLUX_PART_FROM,
         self::FLUX_PART_RANGE,
+        self::FLUX_PART_REDUCE,
         self::FLUX_PART_FILTERS
     ];
 
@@ -88,6 +91,15 @@ class QueryBuilder {
     public function addRangeStart(string $rangeStart): QueryBuilder
     {
         $this->addRange(['start' => $rangeStart]);
+        return $this;
+    }
+
+    public function addReduce(array $settings, array $identity): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_REDUCE,
+            new Reduce($settings, $identity)
+        );
         return $this;
     }
 
