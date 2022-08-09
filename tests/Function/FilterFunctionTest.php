@@ -9,10 +9,10 @@ final class FilterFunctionTest extends TestCase {
 
     public function testSimpleFilter()
     {
-        $expression = new Filter(KeyValue::set('_measurement', 'test_measurement')
-            ->and('_field', 'user')
-            ->or('_field', 'field2')
-            ->and('user', 'my_username')
+        $expression = new Filter(KeyValue::setEquals('_measurement', 'test_measurement')
+            ->andEquals('_field', 'user')
+            ->orEquals('_field', 'field2')
+            ->andEquals('user', 'my_username')
         );
 
         $query = '|> filter(fn: (r) => r._measurement == "test_measurement" and r._field == "user" or ' . 

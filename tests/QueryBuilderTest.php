@@ -43,7 +43,7 @@ final class QueryBuilderTest extends TestCase {
                 ],
                 'test_measurement',
                 '-360h',
-                new KeyValue('user', 'username'),
+                KeyValue::setEquals('user', 'username'),
                 'from(bucket: "example_bucket") |> range(start: "-360h") |> filter(fn: (r) => r._measurement == "test_measurement") ' . 
                     '|> filter(fn: (r) => r.user == "username") '
             ],
