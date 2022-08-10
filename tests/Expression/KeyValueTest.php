@@ -11,7 +11,7 @@ final class KeyValueExpressionTest extends TestCase {
         $keyvalue = KeyValue::setEqualTo('_measurement', 'test_measurement')
             ->andEqualTo('_field', 'user')
             ->or('count', '>=', '1')
-            ->and('user', '==', 'my_username')
+            ->and('user', KeyValue::EQUAL_TO, 'my_username')
             ->orNotEqualTo('test', 'world');
 
         $query = 'r._measurement == "test_measurement" and r._field == "user" or ' . 

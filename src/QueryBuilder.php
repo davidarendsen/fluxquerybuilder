@@ -7,6 +7,10 @@ use Arendsen\FluxQueryBuilder\Function\Filter;
 use Arendsen\FluxQueryBuilder\Function\From;
 use Arendsen\FluxQueryBuilder\Function\Range;
 use Arendsen\FluxQueryBuilder\Function\Reduce;
+use Arendsen\FluxQueryBuilder\Function\Sort;
+use Arendsen\FluxQueryBuilder\Function\Map;
+use Arendsen\FluxQueryBuilder\Function\Group;
+use Arendsen\FluxQueryBuilder\Function\Limit;
 use Exception;
 
 class QueryBuilder {
@@ -15,12 +19,20 @@ class QueryBuilder {
     const FLUX_PART_RANGE = 'range';
     const FLUX_PART_FILTERS = 'filters';
     const FLUX_PART_REDUCE = 'reduce';
+    const FLUX_PART_MAP = 'map';
+    const FLUX_PART_SORT = 'sort';
+    const FLUX_PART_GROUP = 'group';
+    const FLUX_PART_LIMIT = 'limit';
 
     const PARTS = [
         self::FLUX_PART_FROM,
         self::FLUX_PART_RANGE,
         self::FLUX_PART_REDUCE,
-        self::FLUX_PART_FILTERS
+        self::FLUX_PART_FILTERS,
+        self::FLUX_PART_MAP,
+        self::FLUX_PART_SORT,
+        self::FLUX_PART_GROUP,
+        self::FLUX_PART_LIMIT,
     ];
 
     const REQUIRED_INPUT_FROM = 'from';
@@ -99,6 +111,42 @@ class QueryBuilder {
         $this->addToQueryArray(
             self::FLUX_PART_REDUCE,
             new Reduce($settings, $identity)
+        );
+        return $this;
+    }
+
+    public function addSort(array $columns, $desc): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_SORT,
+            new Sort($columns, $desc)
+        );
+        return $this;
+    }
+
+    public function addMap(string $query): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_MAP,
+            new Map($query)
+        );
+        return $this;
+    }
+
+    public function addGroup(array $columns, $mode = 'by'): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_GROUP,
+            new Group($columns, $mode)
+        );
+        return $this;
+    }
+
+    public function addLimit(int $limit): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_LIMIT,
+            new Limit($limit)
         );
         return $this;
     }

@@ -87,4 +87,25 @@ final class QueryBuilderTest extends TestCase {
         ];
     }
 
+    public function testComplexQuery()
+    {
+        $queryBuilder = new QueryBuilder();
+        $queryBuilder->fromBucket('test_bucket')
+            ->fromMeasurement('test_measurement')
+			->addRangeStart('-3h')
+            ->addFilter(KeyValue::setEqualTo('_field', 'username'))
+            ->addMap('r with name: r.user')
+            ->addGroup(['_field', 'ip'])
+            ->addReduce(['count' => 'accumulator.count + 1'], ['count' => 0])
+            ->addFilter(KeyValue::setGreaterOrEqualTo('count', '1'));
+
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: "-3h") ' . 
+            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' . 
+            '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => r._field == "username") ' . 
+            '|> filter(fn: (r) => r.count >= "1") |> map(fn: (r) => ({ r with name: r.user })) ' . 
+            '|> group(columns: ["_field", "ip"], mode: "by") ';
+
+        $this->assertEquals($expectedQuery, $queryBuilder->build());
+    }
+
 }
