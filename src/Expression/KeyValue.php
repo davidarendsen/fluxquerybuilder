@@ -42,9 +42,44 @@ class KeyValue extends Base {
         return new self($key, $operator, $value);
     }
 
-    public static function setEquals(string $key, string $value): KeyValue
+    public static function setEqualTo(string $key, string $value): KeyValue
     {
         return self::set($key, self::EQUAL_TO, $value);
+    }
+
+    public static function setNotEqualTo(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::NOT_EQUAL_TO, $value);
+    }
+
+    public static function setGreaterThan(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::GREATER_THAN, $value);
+    }
+
+    public static function setGreaterOrEqualTo(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::GREATER_EQUAL_TO, $value);
+    }
+
+    public static function setLessThan(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::LESS_THAN, $value);
+    }
+
+    public static function setLessOrEqualTo(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::LESS_EQUAL_TO, $value);
+    }
+
+    public static function setEqualToRegex(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::EQUAL_TO_REGEX, $value);
+    }
+
+    public static function setNotEqualToRegex(string $key, string $value): KeyValue
+    {
+        return self::set($key, self::NOT_EQUAL_TO_REGEX, $value);
     }
 
     public function and(string $key, string $operator, string $value): KeyValue
@@ -54,9 +89,51 @@ class KeyValue extends Base {
         return $this;
     }
 
-    public function andEquals(string $key, string $value): KeyValue
+    public function andEqualTo(string $key, string $value): KeyValue
     {
-        $this->and($key, '==', $value);
+        $this->and($key, self::EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function andNotEqualTo(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::NOT_EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function andGreaterThan(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::GREATER_THAN, $value);
+        return $this;
+    }
+
+    public function andGreaterOrEqualTo(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::GREATER_EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function andLessThan(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::LESS_THAN, $value);
+        return $this;
+    }
+
+    public function andLessOrEqualTo(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::LESS_EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function andEqualToRegex(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::EQUAL_TO_REGEX, $value);
+        return $this;
+    }
+
+    public function andNotEqualToRegex(string $key, string $value): KeyValue
+    {
+        $this->and($key, self::NOT_EQUAL_TO_REGEX, $value);
         return $this;
     }
 
@@ -67,9 +144,51 @@ class KeyValue extends Base {
         return $this;
     }
 
-    public function orEquals(string $key, string $value): KeyValue
+    public function orEqualTo(string $key, string $value): KeyValue
     {
-        $this->or($key, '==', $value);
+        $this->or($key, self::EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function orNotEqualTo(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::NOT_EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function orGreaterThan(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::GREATER_THAN, $value);
+        return $this;
+    }
+
+    public function orGreaterOrEqualTo(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::GREATER_EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function orLessThan(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::LESS_THAN, $value);
+        return $this;
+    }
+
+    public function orLessOrEqualTo(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::LESS_EQUAL_TO, $value);
+        return $this;
+    }
+
+    public function orEqualToRegex(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::EQUAL_TO_REGEX, $value);
+        return $this;
+    }
+
+    public function orNotEqualToRegex(string $key, string $value): KeyValue
+    {
+        $this->or($key, self::NOT_EQUAL_TO_REGEX, $value);
         return $this;
     }
 

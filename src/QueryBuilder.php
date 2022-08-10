@@ -64,7 +64,7 @@ class QueryBuilder {
         $this->addRequiredData(self::REQUIRED_INPUT_MEASUREMENT, $measurement);
         $this->addToQueryArray(
             self::FLUX_PART_FILTERS,
-            new Filter(KeyValue::setEquals('_measurement', $measurement))
+            new Filter(KeyValue::setEqualTo('_measurement', $measurement))
         );
         return $this;
     }

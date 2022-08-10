@@ -19,13 +19,4 @@ class Range extends Base {
         return '|> range(' . implode(', ', $this->format($this->settings)) . ') ';
     }
 
-    protected function format(array $settings)
-    {
-        array_walk($settings, function(&$value, $key) {
-			$value = $key . ': ' . (is_string($value) ? '"' . $value . '"' : $value);
-		});
-
-        return $settings;
-    }
-
 }

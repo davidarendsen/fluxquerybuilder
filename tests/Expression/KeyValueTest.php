@@ -8,14 +8,14 @@ final class KeyValueExpressionTest extends TestCase {
 
     public function testSimpleKeyvalue()
     {
-        $keyvalue = KeyValue::setEquals('_measurement', 'test_measurement')
-            ->andEquals('_field', 'user')
+        $keyvalue = KeyValue::setEqualTo('_measurement', 'test_measurement')
+            ->andEqualTo('_field', 'user')
             ->or('count', '>=', '1')
             ->and('user', '==', 'my_username')
-            ->orEquals('test', 'world');
+            ->orNotEqualTo('test', 'world');
 
         $query = 'r._measurement == "test_measurement" and r._field == "user" or ' . 
-            'r.count >= "1" and r.user == "my_username" or r.test == "world"';
+            'r.count >= "1" and r.user == "my_username" or r.test != "world"';
 
         $this->assertEquals($keyvalue->__toString(), $query);
     }
@@ -24,10 +24,10 @@ final class KeyValueExpressionTest extends TestCase {
     {
         $this->expectException(Exception::class);
 
-        $keyvalue = KeyValue::set('_measurement', '9dkda9e', 'test_measurement')
-            ->andEquals('_field', 'user')
+        KeyValue::set('_measurement', '9dkda9e', 'test_measurement')
+            ->andEqualTo('_field', 'user')
             ->or('_field', '==', 'field2')
-            ->andEquals('user', 'my_username');
+            ->andEqualTo('user', 'my_username');
     }
 
 }

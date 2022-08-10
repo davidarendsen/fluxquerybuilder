@@ -12,4 +12,13 @@ abstract class Base {
 		throw new FunctionNotImplementedException('__toString', get_class($this));
 	}
 
+	protected function format(array $settings)
+    {
+        array_walk($settings, function(&$value, $key) {
+			$value = $key . ': ' . (is_string($value) ? '"' . $value . '"' : $value);
+		});
+
+        return $settings;
+    }
+
 }
