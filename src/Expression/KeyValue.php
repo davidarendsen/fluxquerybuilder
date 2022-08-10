@@ -31,13 +31,14 @@ class KeyValue extends Base {
      */
     private $expressions;
 
-    private function __construct(string $key, string $operator, string $value)
+    private function __construct(string $key, string $operator, $value)
     {
         $this->checkOperator($operator);
-        $this->expressions[] = 'r.' . $key . ' ' . $operator . ' "' . $value . '"';
+        $value = is_string($value) ? '"' . $value . '"' : $value;
+        $this->expressions[] = 'r.' . $key . ' ' . $operator . ' ' . $value;
     }
 
-    public static function set(string $key, string $operator, string $value): KeyValue
+    public static function set(string $key, string $operator, $value): KeyValue
     {
         return new self($key, $operator, $value);
     }
@@ -52,22 +53,22 @@ class KeyValue extends Base {
         return self::set($key, self::NOT_EQUAL_TO, $value);
     }
 
-    public static function setGreaterThan(string $key, string $value): KeyValue
+    public static function setGreaterThan(string $key, int $value): KeyValue
     {
         return self::set($key, self::GREATER_THAN, $value);
     }
 
-    public static function setGreaterOrEqualTo(string $key, string $value): KeyValue
+    public static function setGreaterOrEqualTo(string $key, int $value): KeyValue
     {
         return self::set($key, self::GREATER_EQUAL_TO, $value);
     }
 
-    public static function setLessThan(string $key, string $value): KeyValue
+    public static function setLessThan(string $key, int $value): KeyValue
     {
         return self::set($key, self::LESS_THAN, $value);
     }
 
-    public static function setLessOrEqualTo(string $key, string $value): KeyValue
+    public static function setLessOrEqualTo(string $key, int $value): KeyValue
     {
         return self::set($key, self::LESS_EQUAL_TO, $value);
     }
@@ -82,10 +83,11 @@ class KeyValue extends Base {
         return self::set($key, self::NOT_EQUAL_TO_REGEX, $value);
     }
 
-    public function and(string $key, string $operator, string $value): KeyValue
+    public function and(string $key, string $operator, $value): KeyValue
     {
         $this->checkOperator($operator);
-        $this->expressions[] = 'and r.' . $key . ' ' . $operator . ' "' . $value . '"';
+        $value = is_string($value) ? '"' . $value . '"' : $value;
+        $this->expressions[] = 'and r.' . $key . ' ' . $operator . ' ' . $value;
         return $this;
     }
 
@@ -101,25 +103,25 @@ class KeyValue extends Base {
         return $this;
     }
 
-    public function andGreaterThan(string $key, string $value): KeyValue
+    public function andGreaterThan(string $key, int $value): KeyValue
     {
         $this->and($key, self::GREATER_THAN, $value);
         return $this;
     }
 
-    public function andGreaterOrEqualTo(string $key, string $value): KeyValue
+    public function andGreaterOrEqualTo(string $key, int $value): KeyValue
     {
         $this->and($key, self::GREATER_EQUAL_TO, $value);
         return $this;
     }
 
-    public function andLessThan(string $key, string $value): KeyValue
+    public function andLessThan(string $key, int $value): KeyValue
     {
         $this->and($key, self::LESS_THAN, $value);
         return $this;
     }
 
-    public function andLessOrEqualTo(string $key, string $value): KeyValue
+    public function andLessOrEqualTo(string $key, int $value): KeyValue
     {
         $this->and($key, self::LESS_EQUAL_TO, $value);
         return $this;
@@ -137,10 +139,11 @@ class KeyValue extends Base {
         return $this;
     }
 
-    public function or(string $key, string $operator, string $value): KeyValue
+    public function or(string $key, string $operator, $value): KeyValue
     {
         $this->checkOperator($operator);
-        $this->expressions[] = 'or r.' . $key . ' ' . $operator . ' "' . $value . '"';
+        $value = is_string($value) ? '"' . $value . '"' : $value;
+        $this->expressions[] = 'or r.' . $key . ' ' . $operator . ' ' . $value;
         return $this;
     }
 
@@ -156,25 +159,25 @@ class KeyValue extends Base {
         return $this;
     }
 
-    public function orGreaterThan(string $key, string $value): KeyValue
+    public function orGreaterThan(string $key, int $value): KeyValue
     {
         $this->or($key, self::GREATER_THAN, $value);
         return $this;
     }
 
-    public function orGreaterOrEqualTo(string $key, string $value): KeyValue
+    public function orGreaterOrEqualTo(string $key, int $value): KeyValue
     {
         $this->or($key, self::GREATER_EQUAL_TO, $value);
         return $this;
     }
 
-    public function orLessThan(string $key, string $value): KeyValue
+    public function orLessThan(string $key, int $value): KeyValue
     {
         $this->or($key, self::LESS_THAN, $value);
         return $this;
     }
 
-    public function orLessOrEqualTo(string $key, string $value): KeyValue
+    public function orLessOrEqualTo(string $key, int $value): KeyValue
     {
         $this->or($key, self::LESS_EQUAL_TO, $value);
         return $this;
