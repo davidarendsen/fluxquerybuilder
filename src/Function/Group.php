@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Function;
 
+use Arendsen\FluxQueryBuilder\Formatters;
+
 class Group extends Base {
 
     /**
@@ -22,11 +24,7 @@ class Group extends Base {
 
     public function __toString()
     {
-        $columns = array_map(function($column) {
-			return '"' . $column . '"';
-		}, $this->columns);
-
-        return '|> group(columns: [' . implode(', ', $columns) . '], mode: "' . $this->mode . '") ';
+        return '|> group(columns: [' . Formatters::toFluxArrayString($this->columns) . '], mode: "' . $this->mode . '") ';
     }
 
 }

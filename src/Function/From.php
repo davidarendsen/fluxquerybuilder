@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Function;
 
+use Arendsen\FluxQueryBuilder\Formatters;
+
 class From extends Base {
 
     /**
@@ -16,7 +18,7 @@ class From extends Base {
 
     public function __toString()
     {
-        return 'from(' . implode(', ', $this->format($this->settings)) . ') ';
+        return 'from(' . Formatters::toFluxAssociativeArrayString($this->settings) . ') ';
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Function;
 
+use Arendsen\FluxQueryBuilder\Formatters;
+
 class Reduce extends Base {
 
     /**
@@ -22,10 +24,8 @@ class Reduce extends Base {
 
     public function __toString()
     {
-        //reduce(fn: (r, accumulator) => ({sum: r._value + accumulator.sum}), identity: {sum: 0})
-
         return '|> reduce(fn: (r, accumulator) => ({' . implode(', ', $this->formatSettings($this->settings)) . '}), ' . 
-            'identity: {' . implode(', ', $this->format($this->identity)) . '}) ';
+            'identity: {' . Formatters::toFluxAssociativeArrayString($this->identity) . '}) ';
     }
 
     protected function formatSettings(array $settings)

@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Function;
 
+use Arendsen\FluxQueryBuilder\Formatters;
+
 class Range extends Base {
 
     /**
@@ -16,7 +18,7 @@ class Range extends Base {
 
     public function __toString()
     {
-        return '|> range(' . implode(', ', $this->format($this->settings)) . ') ';
+        return '|> range(' . Formatters::toFluxAssociativeArrayString($this->settings) . ') ';
     }
 
 }

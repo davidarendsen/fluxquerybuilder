@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Function;
 
+use Arendsen\FluxQueryBuilder\Formatters;
+
 class Sort extends Base {
 
     /**
@@ -22,12 +24,8 @@ class Sort extends Base {
 
     public function __toString()
     {
-        $columns = array_map(function($column) {
-			return '"' . $column . '"';
-		}, $this->columns);
-        $desc = $this->desc ? 'true' : 'false';
-
-        return '|> sort(columns: [' . implode(', ', $columns) . '], desc: ' . $desc . ') ';
+        return '|> sort(columns: [' . Formatters::toFluxArrayString($this->columns) . 
+            '], desc: ' . Formatters::valueToString($this->desc) . ') ';
     }
 
 }
