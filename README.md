@@ -27,6 +27,8 @@ $queryBuilder->fromBucket('test_bucket')
     )
     ->addMap('r with name: r.user')
     ->addGroup(['_field', 'ip']);
+
+echo $queryBuilder->build();
 ```
 
 ## Testing
