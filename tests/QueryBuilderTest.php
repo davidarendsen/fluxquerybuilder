@@ -15,7 +15,7 @@ final class QueryBuilderTest extends TestCase {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->from($bucket)
             ->fromMeasurement($measurement)
-			->addRangeStart($range);
+		    ->addRangeStart($range);
 
         if($keyValue)
         {
@@ -92,7 +92,7 @@ final class QueryBuilderTest extends TestCase {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->fromBucket('test_bucket')
             ->fromMeasurement('test_measurement')
-			->addRangeStart('-3h')
+		    ->addRangeStart('-3h')
             ->addFilter(KeyValue::setEqualTo('_field', 'username'))
             ->addMap('r with name: r.user')
             ->addGroup(['_field', 'ip'])

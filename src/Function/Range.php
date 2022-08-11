@@ -18,7 +18,7 @@ class Range extends Base {
 
     public function __toString()
     {
-        return '|> range(' . Formatters::toFluxAssociativeArrayString($this->settings) . ') ';
+        return '|> range(' . Formatters::toFluxArrayString($this->settings) . ') ';
     }
 
 }

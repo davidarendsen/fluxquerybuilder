@@ -18,7 +18,7 @@ class From extends Base {
 
     public function __toString()
     {
-        return 'from(' . Formatters::toFluxAssociativeArrayString($this->settings) . ') ';
+        return 'from(' . Formatters::toFluxArrayString($this->settings) . ') ';
     }
 
 }

@@ -25,7 +25,7 @@ class Reduce extends Base {
     public function __toString()
     {
         return '|> reduce(fn: (r, accumulator) => ({' . implode(', ', $this->formatSettings($this->settings)) . '}), ' . 
-            'identity: {' . Formatters::toFluxAssociativeArrayString($this->identity) . '}) ';
+            'identity: {' . Formatters::toFluxArrayString($this->identity) . '}) ';
     }
 
     protected function formatSettings(array $settings)

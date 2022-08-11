@@ -14,23 +14,25 @@ class Formatters {
         {
             return $value ? 'true' : 'false';
         }
+        elseif(is_array($value))
+        {
+            return self::toFluxArrayString($value);
+        }
 
         return $value;
     }
 
     public static function toFluxArrayString(array $array): string
     {
-        $array = array_map(function($column) {
-            return self::valueToString($column);
-		}, $array);
-
-        return implode(', ', $array);
-    }
-
-    public static function toFluxAssociativeArrayString(array $array): string
-    {
         array_walk($array, function(&$value, $key) {
-			$value = $key . ': ' . self::valueToString($value);
+            if(is_string($key))
+            {
+			    $value = $key . ': ' . self::valueToString($value);
+            }
+            else
+            {
+                $value = self::valueToString($value);
+            }
 		});
 
         return implode(', ', $array);
