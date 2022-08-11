@@ -24,7 +24,12 @@ class Group extends Base {
 
     public function __toString()
     {
-        return '|> group(columns: [' . Formatters::toFluxArrayString($this->columns) . '], mode: "' . $this->mode . '") ';
+        $array = Formatters::toFluxArrayString([
+            'columns' => $this->columns,
+            'mode' => $this->mode,
+        ]);
+
+        return '|> group(' . $array . ') ';
     }
 
 }

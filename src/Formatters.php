@@ -16,7 +16,7 @@ class Formatters {
         }
         elseif(is_array($value))
         {
-            return self::toFluxArrayString($value);
+            return '[' . self::toFluxArrayString($value) . ']';
         }
 
         return $value;
