@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder;
 
+use DateTime;
+
 class Formatters {
 
     public static function valueToString($value): string
@@ -37,5 +39,9 @@ class Formatters {
 
         return implode(', ', $array);
     }
+
+    public static function dateTimeToString(DateTime $dateTime): string {
+		return 'time(v: ' . $dateTime->format('Y-m-d\TH:i:s\Z') . ')';
+	}
 
 }

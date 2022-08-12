@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder;
 
+use DateTime;
+use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use Arendsen\FluxQueryBuilder\Functions\Filter;
 use Arendsen\FluxQueryBuilder\Functions\From;
@@ -11,7 +13,6 @@ use Arendsen\FluxQueryBuilder\Functions\Sort;
 use Arendsen\FluxQueryBuilder\Functions\Map;
 use Arendsen\FluxQueryBuilder\Functions\Group;
 use Arendsen\FluxQueryBuilder\Functions\Limit;
-use Exception;
 
 class QueryBuilder {
 
@@ -100,9 +101,22 @@ class QueryBuilder {
         return $this;
     }
 
-    public function addRangeStart(string $rangeStart): QueryBuilder
+    /**
+     * @param string|DateTime $rangeStart
+     */
+    public function addRangeStart($rangeStart): QueryBuilder
     {
         $this->addRange(['start' => $rangeStart]);
+        return $this;
+    }
+
+    /**
+     * @param string|DateTime $start
+     * @param string|DateTime $stop
+     */
+    public function addRangeInBetween($start, $stop)
+    {
+        $this->addRange(['start' => $start, 'stop' => $stop]);
         return $this;
     }
 

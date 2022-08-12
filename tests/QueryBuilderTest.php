@@ -92,14 +92,14 @@ final class QueryBuilderTest extends TestCase {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->fromBucket('test_bucket')
             ->fromMeasurement('test_measurement')
-		    ->addRangeStart('-3h')
+		    ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
             ->addFilter(KeyValue::setEqualTo('_field', 'username'))
             ->addMap('r with name: r.user')
             ->addGroup(['_field', 'ip'])
             ->addReduce(['count' => 'accumulator.count + 1'], ['count' => 0])
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2));
 
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: -3h) ' . 
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' . 
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' . 
             '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => r._field == "username") ' . 
             '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> map(fn: (r) => ({ r with name: r.user })) ' . 

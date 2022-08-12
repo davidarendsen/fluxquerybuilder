@@ -3,30 +3,48 @@
 namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Exception\FunctionRequiredSettingMissingException;
+use Arendsen\FluxQueryBuilder\Formatters;
+use DateTime;
 
 class Range extends Base {
 
     /**
-     * @var array $settings
+     * @var mixed $start
      */
-    private $settings;
+    private $start;
+
+    /**
+     * @var mixed $stop
+     */
+    private $stop;
 
     public function __construct(array $settings)
     {
-        $this->settings = $settings;
+        $this->start = isset($settings['start']) ? $settings['start'] : null;
+        $this->stop = isset($settings['stop']) ? $settings['stop'] : null;
     }
 
     public function __toString()
     {
-        if(!isset($this->settings['start']))
+        if(!$this->start)
         {
             throw new FunctionRequiredSettingMissingException('Range', 'Start setting is required!');
         }
 
-        $settingsString = 'start: ' . $this->settings['start'];
-        if(isset($this->settings['stop']))
+        if($this->start instanceof DateTime)
         {
-            $settingsString .= ', stop: ' . $this->settings['stop'];
+            $this->start = Formatters::dateTimeToString($this->start);
+        }
+
+        if($this->stop instanceof DateTime)
+        {
+            $this->stop = Formatters::dateTimeToString($this->stop);
+        }
+
+        $settingsString = 'start: ' . $this->start;
+        if($this->stop)
+        {
+            $settingsString .= ', stop: ' . $this->stop;
         }
 
         return '|> range(' . $settingsString . ') ';
