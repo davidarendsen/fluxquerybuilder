@@ -3,14 +3,14 @@
 namespace Arendsen\FluxQueryBuilder;
 
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
-use Arendsen\FluxQueryBuilder\Function\Filter;
-use Arendsen\FluxQueryBuilder\Function\From;
-use Arendsen\FluxQueryBuilder\Function\Range;
-use Arendsen\FluxQueryBuilder\Function\Reduce;
-use Arendsen\FluxQueryBuilder\Function\Sort;
-use Arendsen\FluxQueryBuilder\Function\Map;
-use Arendsen\FluxQueryBuilder\Function\Group;
-use Arendsen\FluxQueryBuilder\Function\Limit;
+use Arendsen\FluxQueryBuilder\Functions\Filter;
+use Arendsen\FluxQueryBuilder\Functions\From;
+use Arendsen\FluxQueryBuilder\Functions\Range;
+use Arendsen\FluxQueryBuilder\Functions\Reduce;
+use Arendsen\FluxQueryBuilder\Functions\Sort;
+use Arendsen\FluxQueryBuilder\Functions\Map;
+use Arendsen\FluxQueryBuilder\Functions\Group;
+use Arendsen\FluxQueryBuilder\Functions\Limit;
 use Exception;
 
 class QueryBuilder {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Arendsen\FluxQueryBuilder\Function\Map;
+use Arendsen\FluxQueryBuilder\Functions\Map;
 use PHPUnit\Framework\TestCase;
 
 final class MapFunctionTest extends TestCase {

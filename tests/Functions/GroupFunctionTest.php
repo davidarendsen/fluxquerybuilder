@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Arendsen\FluxQueryBuilder\Function\Group;
+use Arendsen\FluxQueryBuilder\Functions\Group;
 use PHPUnit\Framework\TestCase;
 
 final class GroupFunctionTest extends TestCase {

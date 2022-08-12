@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Arendsen\FluxQueryBuilder\Function\Sort;
+use Arendsen\FluxQueryBuilder\Functions\Sort;
 use PHPUnit\Framework\TestCase;
 
 final class SortFunctionTest extends TestCase {

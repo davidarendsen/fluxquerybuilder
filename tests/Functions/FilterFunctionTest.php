@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
-use Arendsen\FluxQueryBuilder\Function\Filter;
+use Arendsen\FluxQueryBuilder\Functions\Filter;
 use PHPUnit\Framework\TestCase;
 
 final class FilterFunctionTest extends TestCase {

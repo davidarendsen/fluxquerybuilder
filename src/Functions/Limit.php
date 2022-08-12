@@ -1,6 +1,6 @@
 <?php
 
-namespace Arendsen\FluxQueryBuilder\Function;
+namespace Arendsen\FluxQueryBuilder\Functions;
 
 class Limit extends Base {
 

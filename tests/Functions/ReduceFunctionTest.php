@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Arendsen\FluxQueryBuilder\Function\Reduce;
+use Arendsen\FluxQueryBuilder\Functions\Reduce;
 use PHPUnit\Framework\TestCase;
 
 final class ReduceFunctionTest extends TestCase {

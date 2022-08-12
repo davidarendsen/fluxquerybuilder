@@ -1,6 +1,6 @@
 <?php
 
-namespace Arendsen\FluxQueryBuilder\Function;
+namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 

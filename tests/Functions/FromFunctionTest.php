@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Arendsen\FluxQueryBuilder\Function\From;
+use Arendsen\FluxQueryBuilder\Functions\From;
 use PHPUnit\Framework\TestCase;
 
 final class FromFunctionTest extends TestCase {

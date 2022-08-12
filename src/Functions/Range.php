@@ -1,10 +1,10 @@
 <?php
 
-namespace Arendsen\FluxQueryBuilder\Function;
+namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Formatters;
 
-class From extends Base {
+class Range extends Base {
 
     /**
      * @var array $settings
@@ -18,7 +18,7 @@ class From extends Base {
 
     public function __toString()
     {
-        return 'from(' . Formatters::toFluxArrayString($this->settings) . ') ';
+        return '|> range(' . Formatters::toFluxArrayString($this->settings) . ') ';
     }
 
 }
