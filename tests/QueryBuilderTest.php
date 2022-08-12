@@ -94,7 +94,7 @@ final class QueryBuilderTest extends TestCase {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->fromBucket('test_bucket')
             ->fromMeasurement('test_measurement')
-		    ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
+            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
             ->addFilter(KeyValue::setEqualTo('_field', 'username'))
             ->addMap('r with name: r.user')
             ->addGroup(['_field', 'ip'])
