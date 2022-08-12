@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Exception\FunctionRequiredSettingMissingException;
 
 class Range extends Base {
 
@@ -18,7 +18,18 @@ class Range extends Base {
 
     public function __toString()
     {
-        return '|> range(' . Formatters::toFluxArrayString($this->settings) . ') ';
+        if(!isset($this->settings['start']))
+        {
+            throw new FunctionRequiredSettingMissingException('Range', 'Start setting is required!');
+        }
+
+        $settingsString = 'start: ' . $this->settings['start'];
+        if(isset($this->settings['stop']))
+        {
+            $settingsString .= ', stop: ' . $this->settings['stop'];
+        }
+
+        return '|> range(' . $settingsString . ') ';
     }
 
 }

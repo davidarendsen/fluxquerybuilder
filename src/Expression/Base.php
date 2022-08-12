@@ -2,6 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Expression;
 
+use Arendsen\FluxQueryBuilder\Exception\ExpressionNotImplementedException;
+
 abstract class Base {
 
 	/**

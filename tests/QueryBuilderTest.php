@@ -35,7 +35,7 @@ final class QueryBuilderTest extends TestCase {
                 'test_measurement',
                 '-360h',
                 null,
-                'from(bucket: "example_bucket") |> range(start: "-360h") |> filter(fn: (r) => r._measurement == "test_measurement") '
+                'from(bucket: "example_bucket") |> range(start: -360h) |> filter(fn: (r) => r._measurement == "test_measurement") '
             ],
             'query with filter' => [
                 [
@@ -44,7 +44,7 @@ final class QueryBuilderTest extends TestCase {
                 'test_measurement',
                 '-360h',
                 KeyValue::setEqualTo('user', 'username'),
-                'from(bucket: "example_bucket") |> range(start: "-360h") |> filter(fn: (r) => r._measurement == "test_measurement") ' . 
+                'from(bucket: "example_bucket") |> range(start: -360h) |> filter(fn: (r) => r._measurement == "test_measurement") ' . 
                     '|> filter(fn: (r) => r.user == "username") '
             ],
         ];
@@ -99,7 +99,7 @@ final class QueryBuilderTest extends TestCase {
             ->addReduce(['count' => 'accumulator.count + 1'], ['count' => 0])
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2));
 
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: "-3h") ' . 
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: -3h) ' . 
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' . 
             '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => r._field == "username") ' . 
             '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> map(fn: (r) => ({ r with name: r.user })) ' . 

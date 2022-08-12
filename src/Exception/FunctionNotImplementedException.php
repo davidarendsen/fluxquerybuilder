@@ -1,6 +1,6 @@
 <?php
 
-namespace Arendsen\FluxQueryBuilder\Functions;
+namespace Arendsen\FluxQueryBuilder\Exception;
 
 use Exception;
 
