@@ -20,7 +20,7 @@ use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 $queryBuilder = new QueryBuilder();
 $queryBuilder->fromBucket('test_bucket')
     ->fromMeasurement('test_measurement')
-    ->addRangeStart('-3h')
+    ->addRangeStart(new DateTime('3 hours ago'))
     ->addFilter(
         KeyValue::setEqualTo('_field', 'username')
             ->orEqualTo('_field', 'email')

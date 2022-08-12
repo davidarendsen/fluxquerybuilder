@@ -18,10 +18,10 @@ class Range extends Base {
      */
     private $stop;
 
-    public function __construct(array $settings)
+    public function __construct(DateTime $start, ?DateTime $stop = null)
     {
-        $this->start = isset($settings['start']) ? $settings['start'] : null;
-        $this->stop = isset($settings['stop']) ? $settings['stop'] : null;
+        $this->start = Formatters::dateTimeToString($start);
+        $this->stop = $stop ?  Formatters::dateTimeToString($stop) : null;
     }
 
     public function __toString()
@@ -29,16 +29,6 @@ class Range extends Base {
         if(!$this->start)
         {
             throw new FunctionRequiredSettingMissingException('Range', 'Start setting is required!');
-        }
-
-        if($this->start instanceof DateTime)
-        {
-            $this->start = Formatters::dateTimeToString($this->start);
-        }
-
-        if($this->stop instanceof DateTime)
-        {
-            $this->stop = Formatters::dateTimeToString($this->stop);
         }
 
         $settingsString = 'start: ' . $this->start;

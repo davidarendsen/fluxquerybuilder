@@ -91,32 +91,25 @@ class QueryBuilder {
         return $this;
     }
 
-    public function addRange(array $range): QueryBuilder
+    public function addRange(DateTime $start, ?DateTime $stop = null): QueryBuilder
     {
-        $this->addRequiredData(self::REQUIRED_INPUT_RANGE, $range);
+        $this->addRequiredData(self::REQUIRED_INPUT_RANGE, [$start, $stop]);
         $this->addToQuery(
             self::FLUX_PART_RANGE,
-            new Range($range)
+            new Range($start, $stop)
         );
         return $this;
     }
 
-    /**
-     * @param string|DateTime $rangeStart
-     */
-    public function addRangeStart($rangeStart): QueryBuilder
+    public function addRangeStart(DateTime $start): QueryBuilder
     {
-        $this->addRange(['start' => $rangeStart]);
+        $this->addRange($start);
         return $this;
     }
 
-    /**
-     * @param string|DateTime $start
-     * @param string|DateTime $stop
-     */
-    public function addRangeInBetween($start, $stop)
+    public function addRangeInBetween(DateTime $start, DateTime $stop)
     {
-        $this->addRange(['start' => $start, 'stop' => $stop]);
+        $this->addRange($start, $stop);
         return $this;
     }
 

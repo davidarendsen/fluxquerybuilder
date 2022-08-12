@@ -33,18 +33,20 @@ final class QueryBuilderTest extends TestCase {
                     'bucket' => 'example_bucket',
                 ],
                 'test_measurement',
-                '-360h',
+                new DateTime('2022-08-12 23:05:00'),
                 null,
-                'from(bucket: "example_bucket") |> range(start: -360h) |> filter(fn: (r) => r._measurement == "test_measurement") '
+                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T23:05:00Z)) ' . 
+                    '|> filter(fn: (r) => r._measurement == "test_measurement") '
             ],
             'query with filter' => [
                 [
                     'bucket' => 'example_bucket',
                 ],
                 'test_measurement',
-                '-360h',
+                new DateTime('2022-08-12 20:05:00'),
                 KeyValue::setEqualTo('user', 'username'),
-                'from(bucket: "example_bucket") |> range(start: -360h) |> filter(fn: (r) => r._measurement == "test_measurement") ' . 
+                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T20:05:00Z)) ' . 
+                    '|> filter(fn: (r) => r._measurement == "test_measurement") ' . 
                     '|> filter(fn: (r) => r.user == "username") '
             ],
         ];
@@ -66,7 +68,7 @@ final class QueryBuilderTest extends TestCase {
             $queryBuilder->fromMeasurement($measurement);
         }
         if($range) {
-            $queryBuilder->addRange($range);
+            $queryBuilder->addRangeStart($range['start']);
         }
 
         $queryBuilder->build();
@@ -76,10 +78,10 @@ final class QueryBuilderTest extends TestCase {
     {
         return [
             'without from data' => [
-                null, 'test_measurement', ['start' => '-360h'],
+                null, 'test_measurement', ['start' => new DateTime('2022-08-12 20:05:00')],
             ],
             'without measurement data' => [
-                ['from' => 'test_bucket'], null, ['start' => '-360h'],
+                ['from' => 'test_bucket'], null, ['start' => new DateTime('2022-08-12 20:05:00')],
             ],
             'without range data' => [
                 ['from' => 'test_bucket'], 'test_measurement', null,
