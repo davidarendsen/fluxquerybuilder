@@ -3,6 +3,7 @@
 namespace Arendsen\FluxQueryBuilder;
 
 use DateTime;
+use Arendsen\FluxQueryBuilder\Type\Time;
 
 class Formatters
 {
@@ -34,6 +35,6 @@ class Formatters
 
     public static function dateTimeToString(DateTime $dateTime): string
     {
-        return 'time(v: ' . $dateTime->format('Y-m-d\TH:i:s\Z') . ')';
+        return new Type($dateTime);
     }
 }
