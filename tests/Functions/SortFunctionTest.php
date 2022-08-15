@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Functions;
 
 use Arendsen\FluxQueryBuilder\Functions\Sort;
 use PHPUnit\Framework\TestCase;
 
-final class SortFunctionTest extends TestCase {
-
+final class SortFunctionTest extends TestCase
+{
     public function testSimpleSort()
     {
         $expression = new Sort(['foo', 'bar'], true);
@@ -14,5 +17,4 @@ final class SortFunctionTest extends TestCase {
 
         $this->assertEquals($query, $expression->__toString());
     }
-
 }

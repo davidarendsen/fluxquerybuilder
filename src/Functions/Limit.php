@@ -2,8 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-class Limit extends Base {
-
+class Limit extends Base
+{
     /**
      * @var int $limit
      */
@@ -18,5 +18,4 @@ class Limit extends Base {
     {
         return '|> limit(n:' . (string)$this->limit . ') ';
     }
-
 }

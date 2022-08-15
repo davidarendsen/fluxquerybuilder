@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Functions;
 
 use Arendsen\FluxQueryBuilder\Functions\Limit;
 use PHPUnit\Framework\TestCase;
 
-final class LimitFunctionTest extends TestCase {
-
+final class LimitFunctionTest extends TestCase
+{
     public function testSimpleLimit()
     {
         $expression = new Limit(1);
@@ -14,5 +17,4 @@ final class LimitFunctionTest extends TestCase {
 
         $this->assertEquals($query, $expression->__toString());
     }
-
 }

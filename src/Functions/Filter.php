@@ -4,8 +4,8 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 
-class Filter extends Base {
-
+class Filter extends Base
+{
     /**
      * @var KeyValue $keyValue
      */
@@ -20,5 +20,4 @@ class Filter extends Base {
     {
         return '|> filter(fn: (r) => ' . $this->keyValue . ') ';
     }
-
 }

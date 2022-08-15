@@ -4,4 +4,6 @@ namespace Arendsen\FluxQueryBuilder\Exception;
 
 use Exception;
 
-class ExpressionNotImplementedException extends Exception {}
+class ExpressionNotImplementedException extends Exception
+{
+}

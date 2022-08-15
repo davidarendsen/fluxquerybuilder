@@ -4,20 +4,15 @@ namespace Arendsen\FluxQueryBuilder;
 
 use DateTime;
 
-class Formatters {
-
+class Formatters
+{
     public static function valueToString($value): string
     {
-        if(is_string($value))
-        {
+        if (is_string($value)) {
             return '"' . $value . '"';
-        }
-        elseif(is_bool($value))
-        {
+        } elseif (is_bool($value)) {
             return $value ? 'true' : 'false';
-        }
-        elseif(is_array($value))
-        {
+        } elseif (is_array($value)) {
             return '[' . self::toFluxArrayString($value) . ']';
         }
 
@@ -26,22 +21,19 @@ class Formatters {
 
     public static function toFluxArrayString(array $array): string
     {
-        array_walk($array, function(&$value, $key) {
-            if(is_string($key))
-            {
-			    $value = $key . ': ' . self::valueToString($value);
-            }
-            else
-            {
+        array_walk($array, function (&$value, $key) {
+            if (is_string($key)) {
+                $value = $key . ': ' . self::valueToString($value);
+            } else {
                 $value = self::valueToString($value);
             }
-		});
+        });
 
         return implode(', ', $array);
     }
 
-    public static function dateTimeToString(DateTime $dateTime): string {
-		return 'time(v: ' . $dateTime->format('Y-m-d\TH:i:s\Z') . ')';
-	}
-
+    public static function dateTimeToString(DateTime $dateTime): string
+    {
+        return 'time(v: ' . $dateTime->format('Y-m-d\TH:i:s\Z') . ')';
+    }
 }

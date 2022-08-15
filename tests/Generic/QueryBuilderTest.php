@@ -1,12 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Generic;
 
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use PHPUnit\Framework\TestCase;
 use Arendsen\FluxQueryBuilder\QueryBuilder;
 
-final class QueryBuilderTest extends TestCase {
-
+final class QueryBuilderTest extends TestCase
+{
     /**
      * @dataProvider simpleQueryProvider
      */
@@ -15,10 +18,9 @@ final class QueryBuilderTest extends TestCase {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->from($bucket)
             ->fromMeasurement($measurement)
-		    ->addRangeStart($range);
+            ->addRangeStart($range);
 
-        if($keyValue)
-        {
+        if ($keyValue) {
             $queryBuilder->addFilter($keyValue);
         }
 
@@ -35,7 +37,7 @@ final class QueryBuilderTest extends TestCase {
                 'test_measurement',
                 new DateTime('2022-08-12 23:05:00'),
                 null,
-                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T23:05:00Z)) ' . 
+                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T23:05:00Z)) ' .
                     '|> filter(fn: (r) => r._measurement == "test_measurement") '
             ],
             'query with filter' => [
@@ -45,8 +47,8 @@ final class QueryBuilderTest extends TestCase {
                 'test_measurement',
                 new DateTime('2022-08-12 20:05:00'),
                 KeyValue::setEqualTo('user', 'username'),
-                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T20:05:00Z)) ' . 
-                    '|> filter(fn: (r) => r._measurement == "test_measurement") ' . 
+                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T20:05:00Z)) ' .
+                    '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
                     '|> filter(fn: (r) => r.user == "username") '
             ],
         ];
@@ -61,13 +63,13 @@ final class QueryBuilderTest extends TestCase {
 
         $queryBuilder = new QueryBuilder();
 
-        if($from) {
+        if ($from) {
             $queryBuilder->from($from);
         }
-        if($measurement) {
+        if ($measurement) {
             $queryBuilder->fromMeasurement($measurement);
         }
-        if($range) {
+        if ($range) {
             $queryBuilder->addRangeStart($range['start']);
         }
 
@@ -101,13 +103,12 @@ final class QueryBuilderTest extends TestCase {
             ->addReduce(['count' => 'accumulator.count + 1'], ['count' => 0])
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2));
 
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' . 
-            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' . 
-            '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => r._field == "username") ' . 
-            '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> map(fn: (r) => ({ r with name: r.user })) ' . 
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
+            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
+            '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => r._field == "username") ' .
+            '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> map(fn: (r) => ({ r with name: r.user })) ' .
             '|> group(columns: ["_field", "ip"], mode: "by") ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
-
 }

@@ -6,8 +6,8 @@ use Arendsen\FluxQueryBuilder\Exception\FunctionRequiredSettingMissingException;
 use Arendsen\FluxQueryBuilder\Formatters;
 use DateTime;
 
-class Range extends Base {
-
+class Range extends Base
+{
     /**
      * @var mixed $start
      */
@@ -26,18 +26,15 @@ class Range extends Base {
 
     public function __toString()
     {
-        if(!$this->start)
-        {
+        if (!$this->start) {
             throw new FunctionRequiredSettingMissingException('Range', 'Start setting is required!');
         }
 
         $settingsString = 'start: ' . $this->start;
-        if($this->stop)
-        {
+        if ($this->stop) {
             $settingsString .= ', stop: ' . $this->stop;
         }
 
         return '|> range(' . $settingsString . ') ';
     }
-
 }

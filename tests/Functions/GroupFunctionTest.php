@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Functions;
 
 use Arendsen\FluxQueryBuilder\Functions\Group;
 use PHPUnit\Framework\TestCase;
 
-final class GroupFunctionTest extends TestCase {
-
+final class GroupFunctionTest extends TestCase
+{
     public function testSimpleGroup()
     {
         $expression = new Group(['foo', 'bar'], 'by');
@@ -14,5 +17,4 @@ final class GroupFunctionTest extends TestCase {
 
         $this->assertEquals($query, $expression->__toString());
     }
-
 }

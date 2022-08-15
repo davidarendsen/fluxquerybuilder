@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
-use Arendsen\FluxQueryBuilder\Exception\FunctionRequiredSettingMissingException;
-use Arendsen\FluxQueryBuilder\Formatters;
+namespace Tests\Functions;
+
+use DateTime;
 use Arendsen\FluxQueryBuilder\Functions\Range;
 use PHPUnit\Framework\TestCase;
 
-final class RangeFunctionTest extends TestCase {
-
+final class RangeFunctionTest extends TestCase
+{
     public function testOnlyStartOption()
     {
         $expression = new Range(
@@ -42,5 +44,4 @@ final class RangeFunctionTest extends TestCase {
 
         $this->assertEquals($expected, $expression->__toString());
     }
-
 }

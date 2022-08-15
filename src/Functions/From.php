@@ -4,8 +4,8 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Formatters;
 
-class From extends Base {
-
+class From extends Base
+{
     /**
      * @var array $settings
      */
@@ -20,5 +20,4 @@ class From extends Base {
     {
         return 'from(' . Formatters::toFluxArrayString($this->settings) . ') ';
     }
-
 }

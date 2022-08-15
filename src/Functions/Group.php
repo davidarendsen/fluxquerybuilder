@@ -4,8 +4,8 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Formatters;
 
-class Group extends Base {
-
+class Group extends Base
+{
     /**
      * @var array $columns
      */
@@ -31,5 +31,4 @@ class Group extends Base {
 
         return '|> group(' . $array . ') ';
     }
-
 }

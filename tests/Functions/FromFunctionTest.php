@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Functions;
 
 use Arendsen\FluxQueryBuilder\Functions\From;
 use PHPUnit\Framework\TestCase;
 
-final class FromFunctionTest extends TestCase {
-
+final class FromFunctionTest extends TestCase
+{
     /**
      * @dataProvider somethingProvider
      */
@@ -34,5 +37,4 @@ final class FromFunctionTest extends TestCase {
             ],
         ];
     }
-
 }

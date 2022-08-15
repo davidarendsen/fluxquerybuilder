@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Expression;
 
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use PHPUnit\Framework\TestCase;
 
-final class KeyValueExpressionTest extends TestCase {
-
+final class KeyValueExpressionTest extends TestCase
+{
     public function testSimpleKeyvalue()
     {
         $keyvalue = KeyValue::setEqualTo('_measurement', 'test_measurement')
@@ -14,7 +17,7 @@ final class KeyValueExpressionTest extends TestCase {
             ->and('user', KeyValue::EQUAL_TO, 'my_username')
             ->orNotEqualTo('test', 'world');
 
-        $query = 'r._measurement == "test_measurement" and r._field == "user" or ' . 
+        $query = 'r._measurement == "test_measurement" and r._field == "user" or ' .
             'r.count >= "1" and r.user == "my_username" or r.test != "world"';
 
         $this->assertEquals($keyvalue->__toString(), $query);
@@ -29,5 +32,4 @@ final class KeyValueExpressionTest extends TestCase {
             ->or('_field', '==', 'field2')
             ->andEqualTo('user', 'my_username');
     }
-
 }

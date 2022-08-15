@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Tests\Functions;
 
 use Arendsen\FluxQueryBuilder\Functions\Map;
 use PHPUnit\Framework\TestCase;
 
-final class MapFunctionTest extends TestCase {
-
+final class MapFunctionTest extends TestCase
+{
     public function testSimpleMap()
     {
         $expression = new Map('r with name: r.user');
@@ -14,5 +17,4 @@ final class MapFunctionTest extends TestCase {
 
         $this->assertEquals($query, $expression->__toString());
     }
-
 }

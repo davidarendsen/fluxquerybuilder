@@ -1,11 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
+namespace Tests\Generic;
+
+use DateTime;
 use Arendsen\FluxQueryBuilder\Formatters;
 use PHPUnit\Framework\TestCase;
 
-final class FormattersTest extends TestCase {
-
+final class FormattersTest extends TestCase
+{
     public function testAssociativeArrayNested()
     {
         $array = [
@@ -26,5 +30,4 @@ final class FormattersTest extends TestCase {
 
         $this->assertEquals($expected, Formatters::dateTimeToString($dateTime));
     }
-
 }

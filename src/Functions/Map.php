@@ -2,8 +2,8 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-class Map extends Base {
-
+class Map extends Base
+{
     /**
      * @var array $query
      */
@@ -18,5 +18,4 @@ class Map extends Base {
     {
         return '|> map(fn: (r) => ({ ' . $this->query . ' })) ';
     }
-
 }

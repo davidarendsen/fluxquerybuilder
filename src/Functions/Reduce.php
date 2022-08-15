@@ -4,8 +4,8 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Formatters;
 
-class Reduce extends Base {
-
+class Reduce extends Base
+{
     /**
      * @var array $settings
      */
@@ -24,17 +24,16 @@ class Reduce extends Base {
 
     public function __toString()
     {
-        return '|> reduce(fn: (r, accumulator) => ({' . implode(', ', $this->formatSettings($this->settings)) . '}), ' . 
+        return '|> reduce(fn: (r, accumulator) => ({' . implode(', ', $this->formatSettings($this->settings)) . '}), ' .
             'identity: {' . Formatters::toFluxArrayString($this->identity) . '}) ';
     }
 
     protected function formatSettings(array $settings)
     {
-        array_walk($settings, function(&$value, $key) {
-			$value = $key . ': ' . $value;
-		});
+        array_walk($settings, function (&$value, $key) {
+            $value = $key . ': ' . $value;
+        });
 
         return $settings;
     }
-
 }

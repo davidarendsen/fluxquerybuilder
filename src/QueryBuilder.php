@@ -14,18 +14,18 @@ use Arendsen\FluxQueryBuilder\Functions\Map;
 use Arendsen\FluxQueryBuilder\Functions\Group;
 use Arendsen\FluxQueryBuilder\Functions\Limit;
 
-class QueryBuilder {
+class QueryBuilder
+{
+    public const FLUX_PART_FROM = 'from';
+    public const FLUX_PART_RANGE = 'range';
+    public const FLUX_PART_FILTERS = 'filters';
+    public const FLUX_PART_REDUCE = 'reduce';
+    public const FLUX_PART_MAP = 'map';
+    public const FLUX_PART_SORT = 'sort';
+    public const FLUX_PART_GROUP = 'group';
+    public const FLUX_PART_LIMIT = 'limit';
 
-    const FLUX_PART_FROM = 'from';
-    const FLUX_PART_RANGE = 'range';
-    const FLUX_PART_FILTERS = 'filters';
-    const FLUX_PART_REDUCE = 'reduce';
-    const FLUX_PART_MAP = 'map';
-    const FLUX_PART_SORT = 'sort';
-    const FLUX_PART_GROUP = 'group';
-    const FLUX_PART_LIMIT = 'limit';
-
-    const PARTS = [
+    public const PARTS = [
         self::FLUX_PART_FROM,
         self::FLUX_PART_RANGE,
         self::FLUX_PART_REDUCE,
@@ -36,11 +36,11 @@ class QueryBuilder {
         self::FLUX_PART_LIMIT,
     ];
 
-    const REQUIRED_INPUT_FROM = 'from';
-    const REQUIRED_INPUT_MEASUREMENT = 'measurement';
-    const REQUIRED_INPUT_RANGE = 'range';
+    public const REQUIRED_INPUT_FROM = 'from';
+    public const REQUIRED_INPUT_MEASUREMENT = 'measurement';
+    public const REQUIRED_INPUT_RANGE = 'range';
 
-    const REQUIRED_INPUT = [
+    public const REQUIRED_INPUT = [
         self::REQUIRED_INPUT_FROM,
         self::REQUIRED_INPUT_MEASUREMENT,
         self::REQUIRED_INPUT_RANGE,
@@ -55,7 +55,7 @@ class QueryBuilder {
      * @var array $requiredData
      */
     private $requiredData = [];
-    
+
     public function from(array $from): QueryBuilder
     {
         $this->addRequiredData(self::REQUIRED_INPUT_FROM, $from);
@@ -174,18 +174,13 @@ class QueryBuilder {
 
         $query = '';
 
-        foreach(self::PARTS as $part)
-        {
-            if(isset($this->fluxQueryParts[$part]))
-            {
-                if(is_array($this->fluxQueryParts[$part]))
-                {
-                    foreach($this->fluxQueryParts[$part] as $filter) {
+        foreach (self::PARTS as $part) {
+            if (isset($this->fluxQueryParts[$part])) {
+                if (is_array($this->fluxQueryParts[$part])) {
+                    foreach ($this->fluxQueryParts[$part] as $filter) {
                         $query .= $filter;
                     }
-                }
-                else
-                {
+                } else {
                     $query .= $this->fluxQueryParts[$part];
                 }
             }
@@ -194,18 +189,17 @@ class QueryBuilder {
         return $query;
     }
 
-    protected function addRequiredData(string $key, $value) {
+    protected function addRequiredData(string $key, $value)
+    {
         $this->requiredData[$key] = $value;
     }
 
     protected function checkRequired()
     {
-        foreach(self::REQUIRED_INPUT as $input) {
-            if(!isset($this->requiredData[$input]))
-            {
+        foreach (self::REQUIRED_INPUT as $input) {
+            if (!isset($this->requiredData[$input])) {
                 throw new Exception('You need to define the "' . $input . '" part of the query!');
             }
         }
     }
-
 }

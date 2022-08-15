@@ -5,18 +5,18 @@ namespace Arendsen\FluxQueryBuilder\Expression;
 use Arendsen\FluxQueryBuilder\Formatters;
 use Exception;
 
-class KeyValue extends Base {
+class KeyValue extends Base
+{
+    public const EQUAL_TO = '==';
+    public const NOT_EQUAL_TO = '!=';
+    public const GREATER_THAN = '>';
+    public const GREATER_EQUAL_TO = '>=';
+    public const LESS_THAN = '<';
+    public const LESS_EQUAL_TO = '<=';
+    public const EQUAL_TO_REGEX = '=~';
+    public const NOT_EQUAL_TO_REGEX = '!~';
 
-    const EQUAL_TO = '==';
-    const NOT_EQUAL_TO = '!=';
-    const GREATER_THAN = '>';
-    const GREATER_EQUAL_TO = '>=';
-    const LESS_THAN = '<';
-    const LESS_EQUAL_TO = '<=';
-    const EQUAL_TO_REGEX = '=~';
-    const NOT_EQUAL_TO_REGEX = '!~';
-
-    const COMPARISON_OPERATORS = [
+    public const COMPARISON_OPERATORS = [
         self::EQUAL_TO,
         self::NOT_EQUAL_TO,
         self::GREATER_THAN,
@@ -200,10 +200,8 @@ class KeyValue extends Base {
 
     protected function checkOperator(string $operator)
     {
-        if(!in_array($operator, self::COMPARISON_OPERATORS))
-        {
+        if (!in_array($operator, self::COMPARISON_OPERATORS)) {
             throw new Exception('Operator "' . $operator . '" is not supported!');
         }
     }
-
 }

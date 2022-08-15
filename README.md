@@ -36,3 +36,10 @@ echo $queryBuilder->build();
 ```
 php vendor/bin/phpunit --testdox
 ```
+
+## Coding style
+
+```
+./vendor/bin/phpcbf --standard=PSR12 ./src
+./vendor/bin/phpcbf --standard=PSR12 ./tests
+```

@@ -4,8 +4,8 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Formatters;
 
-class Sort extends Base {
-
+class Sort extends Base
+{
     /**
      * @var array $columns
      */
@@ -24,8 +24,7 @@ class Sort extends Base {
 
     public function __toString()
     {
-        return '|> sort(columns: [' . Formatters::toFluxArrayString($this->columns) . 
+        return '|> sort(columns: [' . Formatters::toFluxArrayString($this->columns) .
             '], desc: ' . Formatters::valueToString($this->desc) . ') ';
     }
-
 }
