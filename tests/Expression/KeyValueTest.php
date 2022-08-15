@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Expression;
 
+use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use PHPUnit\Framework\TestCase;
 

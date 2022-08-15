@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Generic;
 
+use DateTime;
+use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use PHPUnit\Framework\TestCase;
 use Arendsen\FluxQueryBuilder\QueryBuilder;
