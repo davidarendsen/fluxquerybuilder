@@ -2,26 +2,42 @@
 
 namespace Arendsen\FluxQueryBuilder\Type;
 
-use Arendsen\FluxQueryBuilder\Formatters;
 use Arendsen\FluxQueryBuilder\Type;
 
 class ArrayType implements TypeInterface
 {
-    public function __construct(array $value)
+    /**
+     * @var array $value
+     */
+    protected $value;
+
+    /**
+     * @var array $settings
+     */
+    protected $settings;
+
+    public function __construct(array $value, $settings = [])
     {
         $this->value = $value;
+        $this->settings = $settings;
     }
 
     public function __toString(): string
     {
+        $subArray = isset($this->settings['subArray']) && $this->settings['subArray'];
+
         array_walk($this->value, function (&$value, $key) {
             if (is_string($key)) {
-                $value = $key . ': ' . Formatters::valueToString($value);
+                $value = $key . ': ' . new Type($value, [
+                    'subArray' => is_array($value)
+                ]);
             } else {
-                $value = Formatters::valueToString($value);
+                $value = new Type($value, [
+                    'subArray' => is_array($value)
+                ]);
             }
         });
 
-        return implode(', ', $this->value);
+        return ($subArray ? '[' : '') . implode(', ', $this->value) . ($subArray ? ']' : '');
     }
 }

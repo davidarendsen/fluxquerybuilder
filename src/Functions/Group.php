@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Type;
 
 class Group extends Base
 {
@@ -24,7 +24,7 @@ class Group extends Base
 
     public function __toString()
     {
-        $array = Formatters::toFluxArrayString([
+        $array = new Type([
             'columns' => $this->columns,
             'mode' => $this->mode,
         ]);

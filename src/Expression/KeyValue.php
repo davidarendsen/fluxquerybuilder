@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Expression;
 
-use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Type;
 use Exception;
 
 class KeyValue extends Base
@@ -35,7 +35,7 @@ class KeyValue extends Base
     private function __construct(string $key, string $operator, $value)
     {
         $this->checkOperator($operator);
-        $this->expressions[] = 'r.' . $key . ' ' . $operator . ' ' . Formatters::valueToString($value);
+        $this->expressions[] = 'r.' . $key . ' ' . $operator . ' ' . new Type($value);
     }
 
     public static function set(string $key, string $operator, $value): KeyValue
@@ -86,7 +86,7 @@ class KeyValue extends Base
     public function and(string $key, string $operator, $value): KeyValue
     {
         $this->checkOperator($operator);
-        $this->expressions[] = 'and r.' . $key . ' ' . $operator . ' ' . Formatters::valueToString($value);
+        $this->expressions[] = 'and r.' . $key . ' ' . $operator . ' ' . new Type($value);
         return $this;
     }
 
@@ -141,7 +141,7 @@ class KeyValue extends Base
     public function or(string $key, string $operator, $value): KeyValue
     {
         $this->checkOperator($operator);
-        $this->expressions[] = 'or r.' . $key . ' ' . $operator . ' ' . Formatters::valueToString($value);
+        $this->expressions[] = 'or r.' . $key . ' ' . $operator . ' ' . new Type($value);
         return $this;
     }
 

@@ -2,7 +2,6 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-use Arendsen\FluxQueryBuilder\Formatters;
 use Arendsen\FluxQueryBuilder\Type\Record;
 
 class Reduce extends Base
@@ -28,5 +27,4 @@ class Reduce extends Base
         return '|> reduce(fn: (r, accumulator) => (' . new Record($this->settings) . '), ' .
             'identity: ' . new Record($this->identity) . ') ';
     }
-
 }

@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Type;
 
 class Sort extends Base
 {
@@ -24,7 +24,7 @@ class Sort extends Base
 
     public function __toString()
     {
-        return '|> sort(columns: [' . Formatters::toFluxArrayString($this->columns) .
-            '], desc: ' . Formatters::valueToString($this->desc) . ') ';
+        return '|> sort(columns: [' . new Type($this->columns) .
+            '], desc: ' . new Type($this->desc) . ') ';
     }
 }

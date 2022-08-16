@@ -9,9 +9,10 @@ use DateTime;
 
 class Type
 {
-    public function __construct($value)
+    public function __construct($value, $settings = [])
     {
         $this->value = $value;
+        $this->settings = $settings;
     }
 
     public function __toString(): string
@@ -27,7 +28,7 @@ class Type
             case 'boolean':
                 return new BooleanType($this->value);
             case 'array':
-                return new ArrayType($this->value);
+                return new ArrayType($this->value, $this->settings);
             default:
                 return (string)$this->value;
         }

@@ -3,7 +3,7 @@
 namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Exception\FunctionRequiredSettingMissingException;
-use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Type;
 use DateTime;
 
 class Range extends Base
@@ -20,8 +20,8 @@ class Range extends Base
 
     public function __construct(DateTime $start, ?DateTime $stop = null)
     {
-        $this->start = Formatters::dateTimeToString($start);
-        $this->stop = $stop ?  Formatters::dateTimeToString($stop) : null;
+        $this->start = new Type($start);
+        $this->stop = $stop ?  new Type($stop) : null;
     }
 
     public function __toString()

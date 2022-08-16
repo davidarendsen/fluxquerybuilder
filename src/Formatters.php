@@ -10,18 +10,12 @@ class Formatters
 {
     public static function valueToString($value): string
     {
-        if (is_array($value)) {
-            return '[' . new ArrayType($value) . ']';
-        } else {
-            return new Type($value);
-        }
-
-        return $value;
+        return new Type($value);
     }
 
     public static function toFluxArrayString(array $array): string
     {
-        return new ArrayType($array);
+        return new Type($array);
     }
 
     public static function dateTimeToString(DateTime $dateTime): string

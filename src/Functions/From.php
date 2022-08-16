@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Type;
 
 class From extends Base
 {
@@ -18,6 +18,6 @@ class From extends Base
 
     public function __toString()
     {
-        return 'from(' . Formatters::toFluxArrayString($this->settings) . ') ';
+        return 'from(' . new Type($this->settings) . ') ';
     }
 }
