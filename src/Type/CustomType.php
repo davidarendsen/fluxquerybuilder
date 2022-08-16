@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Type;
 
-class Math implements TypeInterface
+class CustomType implements TypeInterface
 {
     public function __construct(string $value)
     {

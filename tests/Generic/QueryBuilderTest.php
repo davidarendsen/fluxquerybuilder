@@ -9,7 +9,7 @@ use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use PHPUnit\Framework\TestCase;
 use Arendsen\FluxQueryBuilder\QueryBuilder;
-use Arendsen\FluxQueryBuilder\Type\Math;
+use Arendsen\FluxQueryBuilder\Type\MathType;
 
 final class QueryBuilderTest extends TestCase
 {
@@ -103,7 +103,7 @@ final class QueryBuilderTest extends TestCase
             ->addFilter(KeyValue::setEqualTo('_field', 'username'))
             ->addMap('r with name: r.user')
             ->addGroup(['_field', 'ip'])
-            ->addReduce(['count' => new Math('accumulator.count + 1')], ['count' => 0])
+            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2));
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .

@@ -4,7 +4,7 @@ namespace Arendsen\FluxQueryBuilder\Type;
 
 use DateTime;
 
-class Time implements TypeInterface
+class TimeType implements TypeInterface
 {
     public function __construct(DateTime $dateTime)
     {

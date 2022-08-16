@@ -25,7 +25,7 @@ class ArrayType implements TypeInterface
     public function __toString(): string
     {
         if (isset($this->settings['isRecord']) && $this->settings['isRecord']) {
-            return new Record($this->value);
+            return new RecordType($this->value);
         }
 
         $subArray = isset($this->settings['isNestedArray']) && $this->settings['isNestedArray'];

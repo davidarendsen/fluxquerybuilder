@@ -4,7 +4,7 @@ namespace Arendsen\FluxQueryBuilder\Type;
 
 use Arendsen\FluxQueryBuilder\Type;
 
-class Record implements TypeInterface
+class RecordType implements TypeInterface
 {
     public function __construct(array $value)
     {

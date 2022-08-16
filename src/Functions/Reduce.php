@@ -2,7 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
-use Arendsen\FluxQueryBuilder\Type\Record;
+use Arendsen\FluxQueryBuilder\Type\RecordType;
 
 class Reduce extends Base
 {
@@ -24,7 +24,7 @@ class Reduce extends Base
 
     public function __toString()
     {
-        return '|> reduce(fn: (r, accumulator) => (' . new Record($this->settings) . '), ' .
-            'identity: ' . new Record($this->identity) . ') ';
+        return '|> reduce(fn: (r, accumulator) => (' . new RecordType($this->settings) . '), ' .
+            'identity: ' . new RecordType($this->identity) . ') ';
     }
 }

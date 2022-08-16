@@ -4,7 +4,7 @@ namespace Arendsen\FluxQueryBuilder;
 
 use Arendsen\FluxQueryBuilder\Type\ArrayType;
 use Arendsen\FluxQueryBuilder\Type\BooleanType;
-use Arendsen\FluxQueryBuilder\Type\Time;
+use Arendsen\FluxQueryBuilder\Type\TimeType;
 use DateTime;
 
 class Type
@@ -20,7 +20,7 @@ class Type
         switch (gettype($this->value)) {
             case 'object':
                 if ($this->value instanceof DateTime) {
-                    return new Time($this->value);
+                    return new TimeType($this->value);
                 }
                 return $this->value->__toString();
             case 'string':

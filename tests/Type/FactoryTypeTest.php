@@ -6,7 +6,10 @@ namespace Tests\Type;
 
 use DateTime;
 use Arendsen\FluxQueryBuilder\Type;
-use Arendsen\FluxQueryBuilder\Type\Record;
+use Arendsen\FluxQueryBuilder\Type\CustomType;
+use Arendsen\FluxQueryBuilder\Type\DurationType;
+use Arendsen\FluxQueryBuilder\Type\MathType;
+use Arendsen\FluxQueryBuilder\Type\RecordType;
 use PHPUnit\Framework\TestCase;
 
 final class FactoryTypeTest extends TestCase
@@ -60,9 +63,21 @@ final class FactoryTypeTest extends TestCase
                 ['hello' => ['test' => 'bar', 'foo' => 'hi']],
                 'hello: [test: "bar", foo: "hi"]'
             ],
-            'Record' => [
-                new Record(['foo' => 'bar', 'nested' => ['hello' => 'world']]),
+            'RecordType' => [
+                new RecordType(['foo' => 'bar', 'nested' => ['hello' => 'world']]),
                 '{foo: "bar", nested: {hello: "world"}}'
+            ],
+            'DurationType' => [
+                new DurationType('5h'),
+                '5h',
+            ],
+            'MathType' => [
+                new MathType('r.count + 1'),
+                'r.count + 1'
+            ],
+            'CustomType' => [
+                new CustomType('this can be anything'),
+                'this can be anything'
             ],
         ];
     }
