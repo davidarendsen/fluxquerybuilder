@@ -31,6 +31,34 @@ final class FactoryTypeTest extends TestCase
                 'value',
                 '"value"',
             ],
+            'Integer' => [
+                12345,
+                '12345'
+            ],
+            'Boolean True' => [
+                true,
+                'true'
+            ],
+            'Boolean False' => [
+                false,
+                'false'
+            ],
+            'Array' => [
+                ['hello', 'world'],
+                '"hello", "world"'
+            ],
+            'Dictionary' => [
+                ['hello' => 'world', 'foo' => 'bar'],
+                'hello: "world", foo: "bar"'
+            ],
+            'Array Multidimensional' => [
+                ['hello' => ['test', 'foo']],
+                'hello: ["test", "foo"]'
+            ],
+            'Array Multidimensional 2' => [
+                ['hello' => ['test' => 'bar', 'foo' => 'hi']],
+                'hello: [test: "bar", foo: "hi"]'
+            ],
         ];
     }
 }

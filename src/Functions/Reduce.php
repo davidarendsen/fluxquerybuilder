@@ -3,6 +3,7 @@
 namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Formatters;
+use Arendsen\FluxQueryBuilder\Type\Record;
 
 class Reduce extends Base
 {
@@ -24,16 +25,8 @@ class Reduce extends Base
 
     public function __toString()
     {
-        return '|> reduce(fn: (r, accumulator) => ({' . implode(', ', $this->formatSettings($this->settings)) . '}), ' .
-            'identity: {' . Formatters::toFluxArrayString($this->identity) . '}) ';
+        return '|> reduce(fn: (r, accumulator) => (' . new Record($this->settings) . '), ' .
+            'identity: ' . new Record($this->identity) . ') ';
     }
 
-    protected function formatSettings(array $settings)
-    {
-        array_walk($settings, function (&$value, $key) {
-            $value = $key . ': ' . $value;
-        });
-
-        return $settings;
-    }
 }
