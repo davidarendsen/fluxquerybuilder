@@ -6,6 +6,7 @@ namespace Tests\Type;
 
 use DateTime;
 use Arendsen\FluxQueryBuilder\Type;
+use Arendsen\FluxQueryBuilder\Type\Record;
 use PHPUnit\Framework\TestCase;
 
 final class FactoryTypeTest extends TestCase
@@ -58,6 +59,10 @@ final class FactoryTypeTest extends TestCase
             'Array Multidimensional 2' => [
                 ['hello' => ['test' => 'bar', 'foo' => 'hi']],
                 'hello: [test: "bar", foo: "hi"]'
+            ],
+            'Record' => [
+                new Record(['foo' => 'bar', 'nested' => ['hello' => 'world']]),
+                '{foo: "bar", nested: {hello: "world"}}'
             ],
         ];
     }

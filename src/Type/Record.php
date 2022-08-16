@@ -15,9 +15,13 @@ class Record implements TypeInterface
     {
         array_walk($this->value, function (&$value, $key) {
             if (is_string($key)) {
-                $value = $key . ': ' . new Type($value);
+                $value = $key . ': ' . new Type($value, [
+                    'isRecord' => true,
+                ]);
             } else {
-                $value = new Type($value);
+                $value = new Type($value, [
+                    'isRecord' => true,
+                ]);
             }
         });
 

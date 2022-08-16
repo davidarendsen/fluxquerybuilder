@@ -24,16 +24,20 @@ class ArrayType implements TypeInterface
 
     public function __toString(): string
     {
-        $subArray = isset($this->settings['subArray']) && $this->settings['subArray'];
+        if (isset($this->settings['isRecord']) && $this->settings['isRecord']) {
+            return new Record($this->value);
+        }
+
+        $subArray = isset($this->settings['isNestedArray']) && $this->settings['isNestedArray'];
 
         array_walk($this->value, function (&$value, $key) {
             if (is_string($key)) {
                 $value = $key . ': ' . new Type($value, [
-                    'subArray' => is_array($value)
+                    'isNestedArray' => is_array($value)
                 ]);
             } else {
                 $value = new Type($value, [
-                    'subArray' => is_array($value)
+                    'isNestedArray' => is_array($value)
                 ]);
             }
         });
