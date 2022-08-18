@@ -9,10 +9,20 @@ use DateTime;
 
 class Type
 {
-    public function __construct($value, $settings = [])
+    /**
+     * @var mixed $value
+     */
+    protected $value;
+
+    /**
+     * @var Settings|null $settings
+     */
+    protected $settings;
+
+    public function __construct($value, Settings $settings = null)
     {
         $this->value = $value;
-        $this->settings = $settings;
+        $this->settings = $settings ? $settings : Settings::set([]);
     }
 
     public function __toString(): string

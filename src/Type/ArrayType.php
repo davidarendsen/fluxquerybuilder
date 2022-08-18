@@ -2,46 +2,67 @@
 
 namespace Arendsen\FluxQueryBuilder\Type;
 
+use Arendsen\FluxQueryBuilder\Settings;
 use Arendsen\FluxQueryBuilder\Type;
 
 class ArrayType implements TypeInterface
 {
+    public const SETTING_IS_NESTED_ARRAY = 'isNestedArray';
+
     /**
      * @var array $value
      */
     protected $value;
 
     /**
-     * @var array $settings
+     * @var Settings|null $settings
      */
     protected $settings;
 
-    public function __construct(array $value, $settings = [])
+    public function __construct(array $value, Settings $settings = null)
     {
         $this->value = $value;
-        $this->settings = $settings;
+        $this->settings = $settings ? $settings : Settings::set([]);
     }
 
     public function __toString(): string
     {
-        if (isset($this->settings['isRecord']) && $this->settings['isRecord']) {
+        if ($this->settings->get(RecordType::SETTING_IS_RECORD)) {
             return new RecordType($this->value);
         }
 
-        $subArray = isset($this->settings['isNestedArray']) && $this->settings['isNestedArray'];
-
         array_walk($this->value, function (&$value, $key) {
-            if (is_string($key)) {
-                $value = $key . ': ' . new Type($value, [
-                    'isNestedArray' => is_array($value)
-                ]);
+            if ($this->isAssociativeArray($key)) {
+                $value = $key . ': ' . new Type($value, Settings::set([
+                    self::SETTING_IS_NESTED_ARRAY => is_array($value)
+                ]));
             } else {
-                $value = new Type($value, [
-                    'isNestedArray' => is_array($value)
-                ]);
+                $value = new Type($value, Settings::set([
+                    self::SETTING_IS_NESTED_ARRAY => is_array($value)
+                ]));
             }
         });
 
-        return ($subArray ? '[' : '') . implode(', ', $this->value) . ($subArray ? ']' : '');
+        return $this->getPrefix() . implode(', ', $this->value) . $this->getSuffix();
+    }
+
+    protected function isAssociativeArray($key): bool
+    {
+        return is_string($key);
+    }
+
+    protected function isNestedArray(): bool
+    {
+        return $this->settings->get(self::SETTING_IS_NESTED_ARRAY) ? true : false;
+    }
+
+    protected function getPrefix(): string
+    {
+        return $this->isNestedArray() ? '[' : '';
+    }
+
+    protected function getSuffix(): string
+    {
+        return $this->isNestedArray() ? ']' : '';
     }
 }
