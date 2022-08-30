@@ -22,4 +22,13 @@ final class FilterFunctionTest extends TestCase
 
         $this->assertEquals($expression->__toString(), $query);
     }
+
+    public function testFieldFilter()
+    {
+        $expression = new Filter(['user', 'field2', 'field3']);
+
+        $query = '|> filter(fn: (r) => r._field == "user" or r._field == "field2" or r._field == "field3") ';
+
+        $this->assertEquals($expression->__toString(), $query);
+    }
 }

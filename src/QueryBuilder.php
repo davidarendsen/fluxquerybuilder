@@ -91,6 +91,15 @@ class QueryBuilder
         return $this;
     }
 
+    public function addFieldFilter(array $fields): QueryBuilder
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_FILTERS,
+            new Filter($fields)
+        );
+        return $this;
+    }
+
     public function addRange(DateTime $start, ?DateTime $stop = null): QueryBuilder
     {
         $this->addRequiredData(self::REQUIRED_INPUT_RANGE, [$start, $stop]);
