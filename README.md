@@ -34,12 +34,12 @@ echo $queryBuilder->build();
 ## Testing
 
 ```
-php vendor/bin/phpunit --testdox
+composer test
 ```
 
 ## Coding style
 
 ```
-./vendor/bin/phpcbf --standard=PSR12 ./src
-./vendor/bin/phpcbf --standard=PSR12 ./tests
+composer check
+composer format
 ```
