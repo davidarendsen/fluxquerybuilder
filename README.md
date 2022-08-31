@@ -39,6 +39,8 @@ composer test
 
 ## Coding style
 
+Run the following commands to check the coding style. We're using the PSR12 standard.
+
 ```
 composer check
 composer format

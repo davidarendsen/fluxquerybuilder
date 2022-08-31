@@ -13,6 +13,7 @@ use Arendsen\FluxQueryBuilder\Functions\Sort;
 use Arendsen\FluxQueryBuilder\Functions\Map;
 use Arendsen\FluxQueryBuilder\Functions\Group;
 use Arendsen\FluxQueryBuilder\Functions\Limit;
+use Arendsen\FluxQueryBuilder\Functions\Window;
 
 class QueryBuilder
 {
@@ -24,6 +25,7 @@ class QueryBuilder
     public const FLUX_PART_SORT = 'sort';
     public const FLUX_PART_GROUP = 'group';
     public const FLUX_PART_LIMIT = 'limit';
+    public const FLUX_PART_WINDOW = 'window';
 
     public const PARTS = [
         self::FLUX_PART_FROM,
@@ -32,6 +34,7 @@ class QueryBuilder
         self::FLUX_PART_FILTERS,
         self::FLUX_PART_MAP,
         self::FLUX_PART_SORT,
+        self::FLUX_PART_WINDOW,
         self::FLUX_PART_GROUP,
         self::FLUX_PART_LIMIT,
     ];
@@ -163,6 +166,23 @@ class QueryBuilder
         $this->addToQueryArray(
             self::FLUX_PART_LIMIT,
             new Limit($limit)
+        );
+        return $this;
+    }
+
+    public function addWindow(
+        $every,
+        ?string $period = null,
+        ?string $offset = null,
+        ?string $location = null,
+        ?string $timeColumn = null,
+        ?string $startColumn = null,
+        ?string $stopColumn = null,
+        bool $createEmpty = false
+    ): QueryBuilder {
+        $this->addToQueryArray(
+            self::FLUX_PART_WINDOW,
+            new Window($every, $period, $offset, $location, $timeColumn, $startColumn, $stopColumn, $createEmpty)
         );
         return $this;
     }

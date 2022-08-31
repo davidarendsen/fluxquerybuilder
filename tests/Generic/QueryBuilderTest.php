@@ -103,6 +103,7 @@ final class QueryBuilderTest extends TestCase
             ->addFieldFilter(['username', 'ip'])
             ->addMap('r with name: r.user')
             ->addGroup(['_field', 'ip'])
+            ->addWindow('20s')
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2));
 
@@ -110,7 +111,7 @@ final class QueryBuilderTest extends TestCase
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
             '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => ' .
             'r._field == "username" or r._field == "ip") |> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) ' .
-            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") ';
+            '|> map(fn: (r) => ({ r with name: r.user })) |> window(every: 20s) |> group(columns: ["_field", "ip"], mode: "by") ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }

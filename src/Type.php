@@ -39,6 +39,8 @@ class Type
                 return new BooleanType($this->value);
             case 'array':
                 return new ArrayType($this->value, $this->settings);
+            case 'NULL':
+                return 'null';
             default:
                 return (string)$this->value;
         }
