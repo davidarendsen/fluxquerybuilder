@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
+use Arendsen\FluxQueryBuilder\Functions\Duplicate;
 use Arendsen\FluxQueryBuilder\Functions\Filter;
 use Arendsen\FluxQueryBuilder\Functions\From;
 use Arendsen\FluxQueryBuilder\Functions\Range;
@@ -29,6 +30,7 @@ class QueryBuilder
     public const FLUX_PART_LIMIT = 'limit';
     public const FLUX_PART_WINDOW = 'window';
     public const FLUX_PART_MEAN = 'mean';
+    public const FLUX_PART_DUPLICATE = 'duplicate';
     public const FLUX_PART_UNWINDOW = 'unwindow';
     public const FLUX_PART_AGGREGATEWINDOW = 'aggregateWindow';
 
@@ -38,6 +40,7 @@ class QueryBuilder
         self::FLUX_PART_REDUCE,
         self::FLUX_PART_WINDOW,
         self::FLUX_PART_MEAN,
+        self::FLUX_PART_DUPLICATE,
         self::FLUX_PART_FILTERS,
         self::FLUX_PART_MAP,
         self::FLUX_PART_SORT,
@@ -187,7 +190,16 @@ class QueryBuilder
         return $this;
     }
 
-    public function addMean(?string $column = '')
+    public function addDuplicate(string $column, string $as): QueryBuilder
+    {
+        $this->addToQuery(
+            self::FLUX_PART_DUPLICATE,
+            new Duplicate($column, $as)
+        );
+        return $this;
+    }
+
+    public function addMean(?string $column = ''): QueryBuilder
     {
         $this->addToQuery(
             self::FLUX_PART_MEAN,
@@ -196,7 +208,7 @@ class QueryBuilder
         return $this;
     }
 
-    public function addUnWindow()
+    public function addUnWindow(): QueryBuilder
     {
         $this->addToQuery(
             self::FLUX_PART_UNWINDOW,
