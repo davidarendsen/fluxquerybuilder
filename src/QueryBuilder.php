@@ -34,7 +34,6 @@ class QueryBuilder
         self::FLUX_PART_FROM,
         self::FLUX_PART_RANGE,
         self::FLUX_PART_REDUCE,
-        self::FLUX_PART_AGGREGATEWINDOW,
         self::FLUX_PART_WINDOW,
         self::FLUX_PART_FILTERS,
         self::FLUX_PART_MAP,
@@ -42,6 +41,7 @@ class QueryBuilder
         self::FLUX_PART_GROUP,
         self::FLUX_PART_LIMIT,
         self::FLUX_PART_UNWINDOW,
+        self::FLUX_PART_AGGREGATEWINDOW,
     ];
 
     public const REQUIRED_INPUT_FROM = 'from';
