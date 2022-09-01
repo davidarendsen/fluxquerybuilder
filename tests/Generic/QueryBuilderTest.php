@@ -109,9 +109,30 @@ final class QueryBuilderTest extends TestCase
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-            '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => ' .
+            '|> window(every: 20s) |> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => ' .
             'r._field == "username" or r._field == "ip") |> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) ' .
-            '|> map(fn: (r) => ({ r with name: r.user })) |> window(every: 20s) |> group(columns: ["_field", "ip"], mode: "by") ';
+            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") ';
+
+        $this->assertEquals($expectedQuery, $queryBuilder->build());
+    }
+
+    public function testQueryWithUnWindow()
+    {
+        $queryBuilder = new QueryBuilder();
+        $queryBuilder->fromBucket('test_bucket')
+            ->fromMeasurement('test_measurement')
+            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
+            ->addFieldFilter(['username', 'ip'])
+            ->addWindow('20s')
+            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
+            ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
+            ->addUnWindow();
+
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
+        '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
+        '|> window(every: 20s) |> filter(fn: (r) => r._measurement == "test_measurement") ' .
+        '|> filter(fn: (r) => r._field == "username" or r._field == "ip") ' .
+        '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }

@@ -26,17 +26,19 @@ class QueryBuilder
     public const FLUX_PART_GROUP = 'group';
     public const FLUX_PART_LIMIT = 'limit';
     public const FLUX_PART_WINDOW = 'window';
+    public const FLUX_PART_UNWINDOW = 'unwindow';
 
     public const PARTS = [
         self::FLUX_PART_FROM,
         self::FLUX_PART_RANGE,
         self::FLUX_PART_REDUCE,
+        self::FLUX_PART_WINDOW,
         self::FLUX_PART_FILTERS,
         self::FLUX_PART_MAP,
         self::FLUX_PART_SORT,
-        self::FLUX_PART_WINDOW,
         self::FLUX_PART_GROUP,
         self::FLUX_PART_LIMIT,
+        self::FLUX_PART_UNWINDOW,
     ];
 
     public const REQUIRED_INPUT_FROM = 'from';
@@ -183,6 +185,15 @@ class QueryBuilder
         $this->addToQueryArray(
             self::FLUX_PART_WINDOW,
             new Window($every, $period, $offset, $location, $timeColumn, $startColumn, $stopColumn, $createEmpty)
+        );
+        return $this;
+    }
+
+    public function addUnWindow()
+    {
+        $this->addToQueryArray(
+            self::FLUX_PART_UNWINDOW,
+            new Window('inf')
         );
         return $this;
     }
