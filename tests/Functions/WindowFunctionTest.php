@@ -20,7 +20,15 @@ final class WindowFunctionTest extends TestCase
 
     public function testAllParameters()
     {
-        $expression = new Window('20s', 'every', '0s', 'location', '_time', '_start', '_stop', true);
+        $expression = new Window('20s', [
+            'period' => 'every', 
+            'offset' => '0s',
+            'location' => 'location', 
+            'timeColumn' => '_time', 
+            'startColumn' => '_start', 
+            'stopColumn' => '_stop', 
+            'createEmpty' => true
+        ]);
 
         $query = '|> window(every: 20s, period: every, offset: 0s, location: "location", ' .
             'timeColumn: "_time", startColumn: "_start", stopColumn: "_stop", createEmpty: true) ';

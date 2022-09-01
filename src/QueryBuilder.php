@@ -175,19 +175,11 @@ class QueryBuilder
         return $this;
     }
 
-    public function addWindow(
-        $every,
-        ?string $period = null,
-        ?string $offset = null,
-        ?string $location = null,
-        ?string $timeColumn = null,
-        ?string $startColumn = null,
-        ?string $stopColumn = null,
-        bool $createEmpty = false
-    ): QueryBuilder {
+    public function addWindow($every, array $options = []): QueryBuilder
+    {
         $this->addToQueryArray(
             self::FLUX_PART_WINDOW,
-            new Window($every, $period, $offset, $location, $timeColumn, $startColumn, $stopColumn, $createEmpty)
+            new Window($every, $options)
         );
         return $this;
     }

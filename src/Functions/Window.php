@@ -14,71 +14,27 @@ class Window extends Base
     private $every;
 
     /**
-     * @var string|null $period
+     * @var array $options
      */
-    private $period;
+    private $options;
 
-    /**
-     * @var string|null $offset
-     */
-    private $offset;
-
-    /**
-     * @var string|null $location
-     */
-    private $location;
-
-    /**
-     * @var string|null $timeColumn
-     */
-    private $timeColumn;
-
-    /**
-     * @var string|null $startColumn
-     */
-    private $startColumn;
-
-    /**
-     * @var string|null $stopColumn
-     */
-    private $stopColumn;
-
-    /**
-     * @var bool $createEmpty
-     */
-    private $createEmpty;
-
-    public function __construct(
-        $every,
-        ?string $period = null,
-        ?string $offset = null,
-        ?string $location = null,
-        ?string $timeColumn = null,
-        ?string $startColumn = null,
-        ?string $stopColumn = null,
-        bool $createEmpty = false
-    ) {
+    public function __construct($every, array $options = []) {
         $this->every = $every;
-        $this->period = $period;
-        $this->offset = $offset;
-        $this->location = $location;
-        $this->timeColumn = $timeColumn;
-        $this->startColumn = $startColumn;
-        $this->stopColumn = $stopColumn;
-        $this->createEmpty = $createEmpty;
+        $this->options = $options;
     }
 
     public function __toString()
     {
         $input = new ArrayType(array_filter([
             'every' => new DurationType($this->every),
-            'period' => $this->period ? new DurationType($this->period) : null,
-            'offset' => $this->offset ? new DurationType($this->offset) : null,
-            'location' => $this->location ? new Type($this->location) : null,
-            'timeColumn' => $this->timeColumn ? new Type($this->timeColumn) : null,
-            'startColumn' => $this->startColumn ? new Type($this->startColumn) : null,
-            'stopColumn' => $this->stopColumn ? new Type($this->stopColumn) : null,
-            'createEmpty' => $this->createEmpty ? new Type($this->createEmpty) : null,
+            'period' => isset($this->options['period']) ? new DurationType($this->options['period']) : null,
+            'offset' => isset($this->options['offset']) ? new DurationType($this->options['offset']) : null,
+            'location' => isset($this->options['location']) ? new Type($this->options['location']) : null,
+            'timeColumn' => isset($this->options['timeColumn']) ? new Type($this->options['timeColumn']) : null,
+            'startColumn' => isset($this->options['startColumn']) ? new Type($this->options['startColumn']) : null,
+            'stopColumn' => isset($this->options['stopColumn']) ? new Type($this->options['stopColumn']) : null,
+            'createEmpty' => isset($this->options['createEmpty']) && $this->options['createEmpty'] ? 
+                new Type($this->options['createEmpty']) : null,
         ]));
         return '|> window(' . $input . ') ';
     }
