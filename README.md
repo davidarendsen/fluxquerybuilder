@@ -19,8 +19,8 @@ use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 
 $queryBuilder = new QueryBuilder();
 $queryBuilder->fromBucket('test_bucket')
-    ->fromMeasurement('test_measurement')
     ->addRangeStart(new DateTime('3 hours ago'))
+    ->fromMeasurement('test_measurement')
     ->addFilter(
         KeyValue::setEqualTo('_field', 'username')
             ->orEqualTo('_field', 'email')
@@ -39,7 +39,7 @@ composer test
 
 ## Coding style
 
-Run the following commands to check the coding style. We're using the PSR12 standard.
+Run the following commands to check and fix the coding style. We're using the PSR12 standard.
 
 ```
 composer check

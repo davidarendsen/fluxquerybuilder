@@ -20,8 +20,8 @@ final class QueryBuilderTest extends TestCase
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->from($bucket)
-            ->fromMeasurement($measurement)
-            ->addRangeStart($range);
+            ->addRangeStart($range)
+            ->fromMeasurement($measurement);
 
         if ($keyValue) {
             $queryBuilder->addFilter($keyValue);
@@ -69,11 +69,11 @@ final class QueryBuilderTest extends TestCase
         if ($from) {
             $queryBuilder->from($from);
         }
-        if ($measurement) {
-            $queryBuilder->fromMeasurement($measurement);
-        }
         if ($range) {
             $queryBuilder->addRangeStart($range['start']);
+        }
+        if ($measurement) {
+            $queryBuilder->fromMeasurement($measurement);
         }
 
         $queryBuilder->build();
@@ -94,17 +94,29 @@ final class QueryBuilderTest extends TestCase
         ];
     }
 
+    public function testThrowsExceptionWhenIncorrectOrder()
+    {
+        $this->expectException(Exception::class);
+
+        $queryBuilder = new QueryBuilder();
+        $queryBuilder->from(['bucket' => 'test_bucket'])
+            ->fromMeasurement('test_measurement')
+            ->addRangeStart(new DateTime('2022-08-12 20:05:00'));
+
+        $queryBuilder->build();
+    }
+
     public function testComplexQuery()
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->fromBucket('test_bucket')
-            ->fromMeasurement('test_measurement')
             ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addFieldFilter(['username', 'ip'])
-            ->addMap('r with name: r.user')
-            ->addGroup(['_field', 'ip'])
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
-            ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2));
+            ->fromMeasurement('test_measurement')
+            ->addFieldFilter(['username', 'ip'])
+            ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
+            ->addMap('r with name: r.user')
+            ->addGroup(['_field', 'ip']);
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
@@ -119,20 +131,20 @@ final class QueryBuilderTest extends TestCase
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->fromBucket('test_bucket')
-            ->fromMeasurement('test_measurement')
             ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addWindow('20s')
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
+            ->addWindow('20s')
             ->addMean()
             ->addDuplicate('tag', 'tag_dup')
+            ->fromMeasurement('test_measurement')
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
             ->addUnWindow();
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
-        '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-        '|> window(every: 20s) |> mean() |> duplicate(column: "tag", as: "tag_dup") ' .
-        '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-        '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
+            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
+            '|> window(every: 20s) |> mean() |> duplicate(column: "tag", as: "tag_dup") ' .
+            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
+            '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
@@ -141,15 +153,32 @@ final class QueryBuilderTest extends TestCase
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->fromBucket('test_bucket')
-            ->fromMeasurement('test_measurement')
             ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addAggregateWindow('20s', 'mean', ['timeDst' => '_time'])
-            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0]);
+            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
+            ->fromMeasurement('test_measurement')
+            ->addAggregateWindow('20s', 'mean', ['timeDst' => '_time']);
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
-        '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-        '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-        '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") ';
+            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
+            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
+            '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") ';
+
+        $this->assertEquals($expectedQuery, $queryBuilder->build());
+    }
+
+    public function testRawQuery()
+    {
+        $queryBuilder = new QueryBuilder();
+        $queryBuilder->fromBucket('test_bucket')
+            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
+            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
+            ->fromMeasurement('test_measurement')
+            ->addRawFunction('|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time")');
+
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
+            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
+            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
+            '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }

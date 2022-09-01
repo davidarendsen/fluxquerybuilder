@@ -16,6 +16,7 @@ use Arendsen\FluxQueryBuilder\Functions\Map;
 use Arendsen\FluxQueryBuilder\Functions\Group;
 use Arendsen\FluxQueryBuilder\Functions\Limit;
 use Arendsen\FluxQueryBuilder\Functions\Mean;
+use Arendsen\FluxQueryBuilder\Functions\RawFunction;
 use Arendsen\FluxQueryBuilder\Functions\Window;
 
 class QueryBuilder
@@ -33,32 +34,22 @@ class QueryBuilder
     public const FLUX_PART_DUPLICATE = 'duplicate';
     public const FLUX_PART_UNWINDOW = 'unwindow';
     public const FLUX_PART_AGGREGATEWINDOW = 'aggregateWindow';
-
-    public const PARTS = [
-        self::FLUX_PART_FROM,
-        self::FLUX_PART_RANGE,
-        self::FLUX_PART_REDUCE,
-        self::FLUX_PART_WINDOW,
-        self::FLUX_PART_MEAN,
-        self::FLUX_PART_DUPLICATE,
-        self::FLUX_PART_FILTERS,
-        self::FLUX_PART_MAP,
-        self::FLUX_PART_SORT,
-        self::FLUX_PART_GROUP,
-        self::FLUX_PART_LIMIT,
-        self::FLUX_PART_UNWINDOW,
-        self::FLUX_PART_AGGREGATEWINDOW,
-    ];
+    public const FLUX_PART_RAWFUNCTION = 'raw';
 
     public const REQUIRED_INPUT_FROM = 'from';
-    public const REQUIRED_INPUT_MEASUREMENT = 'measurement';
     public const REQUIRED_INPUT_RANGE = 'range';
+    public const REQUIRED_INPUT_MEASUREMENT = 'measurement';
 
     public const REQUIRED_INPUT = [
         self::REQUIRED_INPUT_FROM,
-        self::REQUIRED_INPUT_MEASUREMENT,
         self::REQUIRED_INPUT_RANGE,
+        self::REQUIRED_INPUT_MEASUREMENT,
     ];
+
+    /**
+     * @var int $currentFluxQueryPart
+     */
+    private $currentFluxQueryPart = 0;
 
     /**
      * @var array $fluxQuery
@@ -89,16 +80,13 @@ class QueryBuilder
     public function fromMeasurement(string $measurement): QueryBuilder
     {
         $this->addRequiredData(self::REQUIRED_INPUT_MEASUREMENT, $measurement);
-        $this->addToQueryArray(
-            self::FLUX_PART_FILTERS,
-            new Filter(KeyValue::setEqualTo('_measurement', $measurement))
-        );
+        $this->addFilter(KeyValue::setEqualTo('_measurement', $measurement));
         return $this;
     }
 
     public function addFilter(KeyValue $keyValue): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_FILTERS,
             new Filter($keyValue)
         );
@@ -107,7 +95,7 @@ class QueryBuilder
 
     public function addFieldFilter(array $fields): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_FILTERS,
             new Filter($fields)
         );
@@ -138,7 +126,7 @@ class QueryBuilder
 
     public function addReduce(array $settings, array $identity): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_REDUCE,
             new Reduce($settings, $identity)
         );
@@ -147,7 +135,7 @@ class QueryBuilder
 
     public function addSort(array $columns, $desc): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_SORT,
             new Sort($columns, $desc)
         );
@@ -156,7 +144,7 @@ class QueryBuilder
 
     public function addMap(string $query): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_MAP,
             new Map($query)
         );
@@ -165,7 +153,7 @@ class QueryBuilder
 
     public function addGroup(array $columns, $mode = 'by'): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_GROUP,
             new Group($columns, $mode)
         );
@@ -174,7 +162,7 @@ class QueryBuilder
 
     public function addLimit(int $limit): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_LIMIT,
             new Limit($limit)
         );
@@ -226,14 +214,19 @@ class QueryBuilder
         return $this;
     }
 
-    protected function addToQuery($key, $query)
+    public function addRawFunction(string $input): QueryBuilder
     {
-        $this->fluxQueryParts[$key] = $query;
+        $this->addToQuery(
+            self::FLUX_PART_RAWFUNCTION,
+            new RawFunction($input)
+        );
+        return $this;
     }
 
-    protected function addToQueryArray($key, $query)
+    protected function addToQuery($key, $query)
     {
-        $this->fluxQueryParts[$key][] = $query;
+        $this->fluxQueryParts[$this->currentFluxQueryPart] = $query;
+        $this->currentFluxQueryPart++;
     }
 
     public function build(): string
@@ -242,16 +235,8 @@ class QueryBuilder
 
         $query = '';
 
-        foreach (self::PARTS as $part) {
-            if (isset($this->fluxQueryParts[$part])) {
-                if (is_array($this->fluxQueryParts[$part])) {
-                    foreach ($this->fluxQueryParts[$part] as $filter) {
-                        $query .= $filter;
-                    }
-                } else {
-                    $query .= $this->fluxQueryParts[$part];
-                }
-            }
+        foreach ($this->fluxQueryParts as $part) {
+            $query .= $part;
         }
 
         return $query;
@@ -259,13 +244,13 @@ class QueryBuilder
 
     protected function addRequiredData(string $key, $value)
     {
-        $this->requiredData[$key] = $value;
+        $this->requiredData[][$key] = $value;
     }
 
     protected function checkRequired()
     {
-        foreach (self::REQUIRED_INPUT as $input) {
-            if (!isset($this->requiredData[$input])) {
+        foreach (self::REQUIRED_INPUT as $key => $input) {
+            if (!isset($this->requiredData[$key][$input])) {
                 throw new Exception('You need to define the "' . $input . '" part of the query!');
             }
         }
