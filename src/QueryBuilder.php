@@ -14,6 +14,7 @@ use Arendsen\FluxQueryBuilder\Functions\Sort;
 use Arendsen\FluxQueryBuilder\Functions\Map;
 use Arendsen\FluxQueryBuilder\Functions\Group;
 use Arendsen\FluxQueryBuilder\Functions\Limit;
+use Arendsen\FluxQueryBuilder\Functions\Mean;
 use Arendsen\FluxQueryBuilder\Functions\Window;
 
 class QueryBuilder
@@ -27,6 +28,7 @@ class QueryBuilder
     public const FLUX_PART_GROUP = 'group';
     public const FLUX_PART_LIMIT = 'limit';
     public const FLUX_PART_WINDOW = 'window';
+    public const FLUX_PART_MEAN = 'mean';
     public const FLUX_PART_UNWINDOW = 'unwindow';
     public const FLUX_PART_AGGREGATEWINDOW = 'aggregateWindow';
 
@@ -35,6 +37,7 @@ class QueryBuilder
         self::FLUX_PART_RANGE,
         self::FLUX_PART_REDUCE,
         self::FLUX_PART_WINDOW,
+        self::FLUX_PART_MEAN,
         self::FLUX_PART_FILTERS,
         self::FLUX_PART_MAP,
         self::FLUX_PART_SORT,
@@ -177,16 +180,25 @@ class QueryBuilder
 
     public function addWindow($every, array $options = []): QueryBuilder
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_WINDOW,
             new Window($every, $options)
         );
         return $this;
     }
 
+    public function addMean(?string $column = '')
+    {
+        $this->addToQuery(
+            self::FLUX_PART_MEAN,
+            new Mean($column)
+        );
+        return $this;
+    }
+
     public function addUnWindow()
     {
-        $this->addToQueryArray(
+        $this->addToQuery(
             self::FLUX_PART_UNWINDOW,
             new Window('inf')
         );

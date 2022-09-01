@@ -123,12 +123,13 @@ final class QueryBuilderTest extends TestCase
             ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
             ->addWindow('20s')
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
+            ->addMean()
             ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
             ->addUnWindow();
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
         '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-        '|> window(every: 20s) |> filter(fn: (r) => r._measurement == "test_measurement") ' .
+        '|> window(every: 20s) |> mean() |> filter(fn: (r) => r._measurement == "test_measurement") ' .
         '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
