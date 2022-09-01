@@ -141,12 +141,13 @@ final class QueryBuilderTest extends TestCase
         $queryBuilder->fromBucket('test_bucket')
             ->fromMeasurement('test_measurement')
             ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addAggregateWindow('20s', null, null, 'mean')
+            ->addAggregateWindow('20s', 'mean', ['timeDst' => '_time'])
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0]);
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
         '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-        '|> filter(fn: (r) => r._measurement == "test_measurement") |> aggregateWindow(every: 20s, fn: mean) ';
+        '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
+        '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }

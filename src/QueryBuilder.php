@@ -201,20 +201,11 @@ class QueryBuilder
         return $this;
     }
 
-    public function addAggregateWindow(
-        $every,
-        ?string $period = null,
-        ?string $offset = null,
-        $fn,
-        ?string $location = null,
-        ?string $column = null,
-        ?string $timeSrc = null,
-        ?string $timeDst = null,
-        bool $createEmpty = true
-    ): QueryBuilder {
+    public function addAggregateWindow($every, $fn, array $options = []): QueryBuilder
+    {
         $this->addToQuery(
             self::FLUX_PART_AGGREGATEWINDOW,
-            new AggregateWindow($every, $period, $offset, $fn, $location, $column, $timeSrc, $timeDst, $createEmpty)
+            new AggregateWindow($every, $fn, $options)
         );
         return $this;
     }

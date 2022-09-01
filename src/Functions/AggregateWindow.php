@@ -15,74 +15,35 @@ class AggregateWindow extends Base
     private $every;
 
     /**
-     * @var string|null $period
+     * @var string $fn
      */
-    private $period;
+    private $fn;
 
     /**
-     * @var string|null $offset
+     * @var array $options
      */
-    private $offset;
+    private $options;
 
-    /**
-     * @var string|null $location
-     */
-    private $location;
-
-    /**
-     * @var string|null $column
-     */
-    private $column;
-
-    /**
-     * @var string|null $timeSrc
-     */
-    private $timeSrc;
-
-    /**
-     * @var string|null $timeDst
-     */
-    private $timeDst;
-
-    /**
-     * @var bool $createEmpty
-     */
-    private $createEmpty;
-
-    public function __construct(
-        $every,
-        ?string $period = null,
-        ?string $offset = null,
-        $fn,
-        ?string $location = null,
-        ?string $column = null,
-        ?string $timeSrc = null,
-        ?string $timeDst = null,
-        bool $createEmpty = true
-    ) {
+    public function __construct($every, $fn, array $options = [])
+    {
         $this->every = $every;
-        $this->period = $period;
-        $this->offset = $offset;
         $this->fn = $fn;
-        $this->location = $location;
-        $this->column = $column;
-        $this->timeSrc = $timeSrc;
-        $this->timeDst = $timeDst;
-        $this->createEmpty = $createEmpty;
+        $this->options = $options;
     }
 
     public function __toString()
     {
         $input = new ArrayType(array_filter([
             'every' => new DurationType($this->every),
-            'period' => $this->period ? new DurationType($this->period) : null,
-            'offset' => $this->offset ? new DurationType($this->offset) : null,
+            'period' => isset($this->options['period']) ? new DurationType($this->options['period']) : null,
+            'offset' => isset($this->options['offset']) ? new DurationType($this->options['offset']) : null,
             'fn' => new FnType($this->fn),
-            'location' => $this->location ? new Type($this->location) : null,
-            'column' => $this->column ? new Type($this->column) : null,
-            'timeSrc' => $this->timeSrc ? new Type($this->timeSrc) : null,
-            'timeDst' => $this->timeDst ? new Type($this->timeDst) : null,
-            'createEmpty' => !$this->createEmpty ? new Type($this->createEmpty) : null,
+            'location' => isset($this->options['location']) ? new Type($this->options['location']) : null,
+            'column' => isset($this->options['column']) ? new Type($this->options['column']) : null,
+            'timeSrc' => isset($this->options['timeSrc']) ? new Type($this->options['timeSrc']) : null,
+            'timeDst' => isset($this->options['timeDst']) ? new Type($this->options['timeDst']) : null,
+            'createEmpty' => isset($this->options['createEmpty']) && !$this->options['createEmpty'] ?
+                new Type($this->options['createEmpty']) : null,
         ]));
         return '|> aggregateWindow(' . $input . ') ';
     }

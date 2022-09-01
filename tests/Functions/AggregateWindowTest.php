@@ -11,7 +11,7 @@ final class AggregateWindowFunctionTest extends TestCase
 {
     public function testSimpleWindow()
     {
-        $expression = new AggregateWindow('20s', null, null, 'mean');
+        $expression = new AggregateWindow('20s', 'mean');
 
         $query = '|> aggregateWindow(every: 20s, fn: mean) ';
 
@@ -20,7 +20,15 @@ final class AggregateWindowFunctionTest extends TestCase
 
     public function testAllParameters()
     {
-        $expression = new AggregateWindow('20s', 'every', '0s', 'mean', 'location', '_value', '_stop', '_time', false);
+        $expression = new AggregateWindow('20s', 'mean', [
+            'period' => 'every',
+            'offset' => '0s',
+            'location' => 'location',
+            'column' => '_value',
+            'timeSrc' => '_stop',
+            'timeDst' => '_time',
+            'createEmpty' => false
+        ]);
 
         $query = '|> aggregateWindow(every: 20s, period: every, offset: 0s, fn: mean, location: "location", ' .
             'column: "_value", timeSrc: "_stop", timeDst: "_time", createEmpty: false) ';
