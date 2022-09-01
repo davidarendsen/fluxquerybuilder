@@ -21,12 +21,12 @@ final class WindowFunctionTest extends TestCase
     public function testAllParameters()
     {
         $expression = new Window('20s', [
-            'period' => 'every', 
+            'period' => 'every',
             'offset' => '0s',
-            'location' => 'location', 
-            'timeColumn' => '_time', 
-            'startColumn' => '_start', 
-            'stopColumn' => '_stop', 
+            'location' => 'location',
+            'timeColumn' => '_time',
+            'startColumn' => '_start',
+            'stopColumn' => '_stop',
             'createEmpty' => true
         ]);
 

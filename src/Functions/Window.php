@@ -18,7 +18,8 @@ class Window extends Base
      */
     private $options;
 
-    public function __construct($every, array $options = []) {
+    public function __construct($every, array $options = [])
+    {
         $this->every = $every;
         $this->options = $options;
     }
@@ -33,7 +34,7 @@ class Window extends Base
             'timeColumn' => isset($this->options['timeColumn']) ? new Type($this->options['timeColumn']) : null,
             'startColumn' => isset($this->options['startColumn']) ? new Type($this->options['startColumn']) : null,
             'stopColumn' => isset($this->options['stopColumn']) ? new Type($this->options['stopColumn']) : null,
-            'createEmpty' => isset($this->options['createEmpty']) && $this->options['createEmpty'] ? 
+            'createEmpty' => isset($this->options['createEmpty']) && $this->options['createEmpty'] ?
                 new Type($this->options['createEmpty']) : null,
         ]));
         return '|> window(' . $input . ') ';
