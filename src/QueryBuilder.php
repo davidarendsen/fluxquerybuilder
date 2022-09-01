@@ -5,6 +5,7 @@ namespace Arendsen\FluxQueryBuilder;
 use DateTime;
 use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
+use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
 use Arendsen\FluxQueryBuilder\Functions\Filter;
 use Arendsen\FluxQueryBuilder\Functions\From;
 use Arendsen\FluxQueryBuilder\Functions\Range;
@@ -27,11 +28,13 @@ class QueryBuilder
     public const FLUX_PART_LIMIT = 'limit';
     public const FLUX_PART_WINDOW = 'window';
     public const FLUX_PART_UNWINDOW = 'unwindow';
+    public const FLUX_PART_AGGREGATEWINDOW = 'aggregateWindow';
 
     public const PARTS = [
         self::FLUX_PART_FROM,
         self::FLUX_PART_RANGE,
         self::FLUX_PART_REDUCE,
+        self::FLUX_PART_AGGREGATEWINDOW,
         self::FLUX_PART_WINDOW,
         self::FLUX_PART_FILTERS,
         self::FLUX_PART_MAP,
@@ -194,6 +197,24 @@ class QueryBuilder
         $this->addToQueryArray(
             self::FLUX_PART_UNWINDOW,
             new Window('inf')
+        );
+        return $this;
+    }
+
+    public function addAggregateWindow(
+        $every,
+        ?string $period = null,
+        ?string $offset = null,
+        $fn,
+        ?string $location = null,
+        ?string $column = null,
+        ?string $timeSrc = null,
+        ?string $timeDst = null,
+        bool $createEmpty = true
+    ): QueryBuilder {
+        $this->addToQuery(
+            self::FLUX_PART_AGGREGATEWINDOW,
+            new AggregateWindow($every, $period, $offset, $fn, $location, $column, $timeSrc, $timeDst, $createEmpty)
         );
         return $this;
     }
