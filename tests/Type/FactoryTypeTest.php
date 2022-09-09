@@ -8,6 +8,7 @@ use DateTime;
 use Arendsen\FluxQueryBuilder\Type;
 use Arendsen\FluxQueryBuilder\Type\CustomType;
 use Arendsen\FluxQueryBuilder\Type\DurationType;
+use Arendsen\FluxQueryBuilder\Type\FnType;
 use Arendsen\FluxQueryBuilder\Type\MathType;
 use Arendsen\FluxQueryBuilder\Type\RecordType;
 use PHPUnit\Framework\TestCase;
@@ -78,6 +79,14 @@ final class FactoryTypeTest extends TestCase
             'CustomType' => [
                 new CustomType('this can be anything'),
                 'this can be anything'
+            ],
+            'FnType with only content' => [
+                new FnType('(r) => ({ r with _value: r._value * r._value })'),
+                '(r) => ({ r with _value: r._value * r._value })'
+            ],
+            'FnType with params and content' => [
+                new FnType(['r', 'a'], '({ r with _value: r._value * r._value })'),
+                '(r, a) => ({ r with _value: r._value * r._value })'
             ],
         ];
     }

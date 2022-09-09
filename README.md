@@ -1,7 +1,7 @@
 # InfluxDB 2.x Flux Query Builder
 
 With this query builder you can build queries for Flux.
-See https://docs.influxdata.com/influxdb/v2.3/query-data/flux/
+See https://docs.influxdata.com/influxdb/v2.4/query-data/flux/
 
 ## Installation
 
