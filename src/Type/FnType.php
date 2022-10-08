@@ -22,7 +22,7 @@ class FnType implements TypeInterface
 
     public function __toString(): string
     {
-        if(is_string($this->value)) {
+        if (is_string($this->value)) {
             return $this->value;
         }
 
