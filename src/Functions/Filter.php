@@ -4,6 +4,7 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Exception\FunctionInvalidInputException;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
+use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
 
 class Filter extends Base
 {
@@ -27,7 +28,7 @@ class Filter extends Base
      */
     protected function format(): string
     {
-        if ($this->filter instanceof KeyValue) {
+        if ($this->filter instanceof KeyValue || $this->filter instanceof KeyFilter) {
             return $this->filter->__toString();
         } elseif (is_array($this->filter)) {
             $filterCounter = 0;

@@ -15,14 +15,15 @@ composer require arendsen/fluxquerybuilder
 <?php
 
 use Arendsen\FluxQueryBuilder\QueryBuilder;
-use Arendsen\FluxQueryBuilder\Expression\KeyValue;
+use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
 
 $queryBuilder = new QueryBuilder();
 $queryBuilder->fromBucket('test_bucket')
     ->addRangeStart(new DateTime('3 hours ago'))
     ->fromMeasurement('test_measurement')
-    ->addFilter(
-        KeyValue::setEqualTo('_field', 'username')
+    ->addFieldFilter(['username', 'email'])
+    ->addKeyFilter(
+        KeyFilter::setEqualTo('_field', 'username')
             ->orEqualTo('_field', 'email')
     )
     ->addMap('r with name: r.user')

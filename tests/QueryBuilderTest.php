@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Generic;
+namespace Tests;
 
 use DateTime;
 use Exception;
+use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use PHPUnit\Framework\TestCase;
 use Arendsen\FluxQueryBuilder\QueryBuilder;
@@ -16,15 +17,15 @@ final class QueryBuilderTest extends TestCase
     /**
      * @dataProvider simpleQueryProvider
      */
-    public function testSimpleQuery($bucket, $measurement, $range, $keyValue, $expectedQuery)
+    public function testSimpleQuery($bucket, $measurement, $range, $keyFilter, $expectedQuery)
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->from($bucket)
             ->addRangeStart($range)
             ->fromMeasurement($measurement);
 
-        if ($keyValue) {
-            $queryBuilder->addFilter($keyValue);
+        if ($keyFilter) {
+            $queryBuilder->addKeyFilter($keyFilter);
         }
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
@@ -49,7 +50,7 @@ final class QueryBuilderTest extends TestCase
                 ],
                 'test_measurement',
                 new DateTime('2022-08-12 20:05:00'),
-                KeyValue::setEqualTo('user', 'username'),
+                KeyFilter::setEqualTo('user', 'username'),
                 'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T20:05:00Z)) ' .
                     '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
                     '|> filter(fn: (r) => r.user == "username") '
@@ -114,7 +115,7 @@ final class QueryBuilderTest extends TestCase
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
             ->fromMeasurement('test_measurement')
             ->addFieldFilter(['username', 'ip'])
-            ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
+            ->addKeyFilter(KeyFilter::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
             ->addMap('r with name: r.user')
             ->addGroup(['_field', 'ip']);
 
@@ -137,13 +138,15 @@ final class QueryBuilderTest extends TestCase
             ->addMean()
             ->addDuplicate('tag', 'tag_dup')
             ->fromMeasurement('test_measurement')
-            ->addFilter(KeyValue::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
+            ->addFilter(KeyValue::setGreaterOrEqualTo('count', 2)->andGreaterOrEqualTo('count2', 3))
+            ->addKeyFilter(KeyFilter::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
             ->addUnWindow();
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
             '|> window(every: 20s) |> mean() |> duplicate(column: "tag", as: "tag_dup") ' .
             '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
+            '|> filter(fn: (r) => r.count >= 2 and r.count2 >= 3) ' .
             '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());

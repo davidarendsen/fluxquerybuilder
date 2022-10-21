@@ -5,6 +5,7 @@ namespace Arendsen\FluxQueryBuilder;
 use DateTime;
 use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
+use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
 use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
 use Arendsen\FluxQueryBuilder\Functions\Duplicate;
 use Arendsen\FluxQueryBuilder\Functions\Filter;
@@ -80,15 +81,30 @@ class QueryBuilder
     public function fromMeasurement(string $measurement): QueryBuilder
     {
         $this->addRequiredData(self::REQUIRED_INPUT_MEASUREMENT, $measurement);
-        $this->addFilter(KeyValue::setEqualTo('_measurement', $measurement));
+        $this->addKeyFilter(KeyFilter::setEqualTo('_measurement', $measurement));
         return $this;
     }
 
+    /**
+     * @deprecated
+     *
+     * @param KeyValue $keyValue
+     * @return QueryBuilder
+     */
     public function addFilter(KeyValue $keyValue): QueryBuilder
     {
         $this->addToQuery(
             self::FLUX_PART_FILTERS,
             new Filter($keyValue)
+        );
+        return $this;
+    }
+
+    public function addKeyFilter(KeyFilter $keyFilter): QueryBuilder
+    {
+        $this->addToQuery(
+            self::FLUX_PART_FILTERS,
+            new Filter($keyFilter)
         );
         return $this;
     }

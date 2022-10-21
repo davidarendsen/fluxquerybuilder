@@ -5,10 +5,7 @@ namespace Arendsen\FluxQueryBuilder\Expression;
 use Arendsen\FluxQueryBuilder\Type;
 use Exception;
 
-/**
- * @deprecated
- */
-class KeyValue extends Base
+class KeyFilter extends Base
 {
     public const EQUAL_TO = '==';
     public const NOT_EQUAL_TO = '!=';
@@ -41,156 +38,156 @@ class KeyValue extends Base
         $this->expressions[] = 'r.' . $key . ' ' . $operator . ' ' . new Type($value);
     }
 
-    public static function set(string $key, string $operator, $value): KeyValue
+    public static function set(string $key, string $operator, $value): KeyFilter
     {
         return new self($key, $operator, $value);
     }
 
-    public static function setEqualTo(string $key, string $value): KeyValue
+    public static function setEqualTo(string $key, string $value): KeyFilter
     {
         return self::set($key, self::EQUAL_TO, $value);
     }
 
-    public static function setNotEqualTo(string $key, string $value): KeyValue
+    public static function setNotEqualTo(string $key, string $value): KeyFilter
     {
         return self::set($key, self::NOT_EQUAL_TO, $value);
     }
 
-    public static function setGreaterThan(string $key, int $value): KeyValue
+    public static function setGreaterThan(string $key, int $value): KeyFilter
     {
         return self::set($key, self::GREATER_THAN, $value);
     }
 
-    public static function setGreaterOrEqualTo(string $key, int $value): KeyValue
+    public static function setGreaterOrEqualTo(string $key, int $value): KeyFilter
     {
         return self::set($key, self::GREATER_EQUAL_TO, $value);
     }
 
-    public static function setLessThan(string $key, int $value): KeyValue
+    public static function setLessThan(string $key, int $value): KeyFilter
     {
         return self::set($key, self::LESS_THAN, $value);
     }
 
-    public static function setLessOrEqualTo(string $key, int $value): KeyValue
+    public static function setLessOrEqualTo(string $key, int $value): KeyFilter
     {
         return self::set($key, self::LESS_EQUAL_TO, $value);
     }
 
-    public static function setEqualToRegex(string $key, string $value): KeyValue
+    public static function setEqualToRegex(string $key, string $value): KeyFilter
     {
         return self::set($key, self::EQUAL_TO_REGEX, $value);
     }
 
-    public static function setNotEqualToRegex(string $key, string $value): KeyValue
+    public static function setNotEqualToRegex(string $key, string $value): KeyFilter
     {
         return self::set($key, self::NOT_EQUAL_TO_REGEX, $value);
     }
 
-    public function and(string $key, string $operator, $value): KeyValue
+    public function and(string $key, string $operator, $value): KeyFilter
     {
         $this->checkOperator($operator);
         $this->expressions[] = 'and r.' . $key . ' ' . $operator . ' ' . new Type($value);
         return $this;
     }
 
-    public function andEqualTo(string $key, string $value): KeyValue
+    public function andEqualTo(string $key, string $value): KeyFilter
     {
         $this->and($key, self::EQUAL_TO, $value);
         return $this;
     }
 
-    public function andNotEqualTo(string $key, string $value): KeyValue
+    public function andNotEqualTo(string $key, string $value): KeyFilter
     {
         $this->and($key, self::NOT_EQUAL_TO, $value);
         return $this;
     }
 
-    public function andGreaterThan(string $key, int $value): KeyValue
+    public function andGreaterThan(string $key, int $value): KeyFilter
     {
         $this->and($key, self::GREATER_THAN, $value);
         return $this;
     }
 
-    public function andGreaterOrEqualTo(string $key, int $value): KeyValue
+    public function andGreaterOrEqualTo(string $key, int $value): KeyFilter
     {
         $this->and($key, self::GREATER_EQUAL_TO, $value);
         return $this;
     }
 
-    public function andLessThan(string $key, int $value): KeyValue
+    public function andLessThan(string $key, int $value): KeyFilter
     {
         $this->and($key, self::LESS_THAN, $value);
         return $this;
     }
 
-    public function andLessOrEqualTo(string $key, int $value): KeyValue
+    public function andLessOrEqualTo(string $key, int $value): KeyFilter
     {
         $this->and($key, self::LESS_EQUAL_TO, $value);
         return $this;
     }
 
-    public function andEqualToRegex(string $key, string $value): KeyValue
+    public function andEqualToRegex(string $key, string $value): KeyFilter
     {
         $this->and($key, self::EQUAL_TO_REGEX, $value);
         return $this;
     }
 
-    public function andNotEqualToRegex(string $key, string $value): KeyValue
+    public function andNotEqualToRegex(string $key, string $value): KeyFilter
     {
         $this->and($key, self::NOT_EQUAL_TO_REGEX, $value);
         return $this;
     }
 
-    public function or(string $key, string $operator, $value): KeyValue
+    public function or(string $key, string $operator, $value): KeyFilter
     {
         $this->checkOperator($operator);
         $this->expressions[] = 'or r.' . $key . ' ' . $operator . ' ' . new Type($value);
         return $this;
     }
 
-    public function orEqualTo(string $key, string $value): KeyValue
+    public function orEqualTo(string $key, string $value): KeyFilter
     {
         $this->or($key, self::EQUAL_TO, $value);
         return $this;
     }
 
-    public function orNotEqualTo(string $key, string $value): KeyValue
+    public function orNotEqualTo(string $key, string $value): KeyFilter
     {
         $this->or($key, self::NOT_EQUAL_TO, $value);
         return $this;
     }
 
-    public function orGreaterThan(string $key, int $value): KeyValue
+    public function orGreaterThan(string $key, int $value): KeyFilter
     {
         $this->or($key, self::GREATER_THAN, $value);
         return $this;
     }
 
-    public function orGreaterOrEqualTo(string $key, int $value): KeyValue
+    public function orGreaterOrEqualTo(string $key, int $value): KeyFilter
     {
         $this->or($key, self::GREATER_EQUAL_TO, $value);
         return $this;
     }
 
-    public function orLessThan(string $key, int $value): KeyValue
+    public function orLessThan(string $key, int $value): KeyFilter
     {
         $this->or($key, self::LESS_THAN, $value);
         return $this;
     }
 
-    public function orLessOrEqualTo(string $key, int $value): KeyValue
+    public function orLessOrEqualTo(string $key, int $value): KeyFilter
     {
         $this->or($key, self::LESS_EQUAL_TO, $value);
         return $this;
     }
 
-    public function orEqualToRegex(string $key, string $value): KeyValue
+    public function orEqualToRegex(string $key, string $value): KeyFilter
     {
         $this->or($key, self::EQUAL_TO_REGEX, $value);
         return $this;
     }
 
-    public function orNotEqualToRegex(string $key, string $value): KeyValue
+    public function orNotEqualToRegex(string $key, string $value): KeyFilter
     {
         $this->or($key, self::NOT_EQUAL_TO_REGEX, $value);
         return $this;
