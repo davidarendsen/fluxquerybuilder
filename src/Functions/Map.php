@@ -2,14 +2,16 @@
 
 namespace Arendsen\FluxQueryBuilder\Functions;
 
+use Arendsen\FluxQueryBuilder\Expression\Map as MapExpression;
+
 class Map extends Base
 {
     /**
-     * @var array $query
+     * @var mixed $query
      */
     private $query;
 
-    public function __construct(string $query)
+    public function __construct($query)
     {
         $this->query = $query;
     }

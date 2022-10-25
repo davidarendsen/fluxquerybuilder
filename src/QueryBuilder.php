@@ -158,7 +158,7 @@ class QueryBuilder
         return $this;
     }
 
-    public function addMap(string $query): QueryBuilder
+    public function addMap($query): QueryBuilder
     {
         $this->addToQuery(
             self::FLUX_PART_MAP,

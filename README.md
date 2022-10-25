@@ -16,6 +16,8 @@ composer require arendsen/fluxquerybuilder
 
 use Arendsen\FluxQueryBuilder\QueryBuilder;
 use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
+use Arendsen\FluxQueryBuilder\Expression\Map;
+use Arendsen\FluxQueryBuilder\Expression\Selection;
 
 $queryBuilder = new QueryBuilder();
 $queryBuilder->fromBucket('test_bucket')
@@ -26,7 +28,13 @@ $queryBuilder->fromBucket('test_bucket')
         KeyFilter::setEqualTo('_field', 'username')
             ->orEqualTo('_field', 'email')
     )
-    ->addMap('r with name: r.user')
+    ->addMap(Map::with('name', 'user'))
+    ->addMap(Map::columns([
+		'time' => '_time',
+		'source' => 'tag',
+		'alert' => Selection::if('r._value > 10')->then(true)->else(false),
+        'test' => Selection::if('r._value > 10')->then('yes')->else('no'),
+	]))
     ->addGroup(['_field', 'ip']);
 
 echo $queryBuilder->build();
