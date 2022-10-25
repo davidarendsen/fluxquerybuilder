@@ -30,11 +30,11 @@ $queryBuilder->fromBucket('test_bucket')
     )
     ->addMap(Map::with('name', 'user'))
     ->addMap(Map::columns([
-		'time' => '_time',
-		'source' => 'tag',
-		'alert' => Selection::if('r._value > 10')->then(true)->else(false),
+	    'time' => '_time',
+        'source' => 'tag',
+        'alert' => Selection::if('r._value > 10')->then(true)->else(false),
         'test' => Selection::if('r._value > 10')->then('yes')->else('no'),
-	]))
+    ]))
     ->addGroup(['_field', 'ip']);
 
 echo $queryBuilder->build();
