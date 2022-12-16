@@ -13,7 +13,16 @@ final class LimitFunctionTest extends TestCase
     {
         $expression = new Limit(1);
 
-        $query = '|> limit(n:1) ';
+        $query = '|> limit(n: 1, offset: 0) ';
+
+        $this->assertEquals($query, $expression->__toString());
+    }
+
+    public function testLimitWithOffset()
+    {
+        $expression = new Limit(10, 2);
+
+        $query = '|> limit(n: 10, offset: 2) ';
 
         $this->assertEquals($query, $expression->__toString());
     }

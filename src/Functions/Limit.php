@@ -9,13 +9,14 @@ class Limit extends Base
      */
     private $limit;
 
-    public function __construct(int $limit)
+    public function __construct(int $limit, int $offset = 0)
     {
         $this->limit = $limit;
+        $this->offset = $offset;
     }
 
     public function __toString()
     {
-        return '|> limit(n:' . (string)$this->limit . ') ';
+        return '|> limit(n: ' . (string)$this->limit . ', offset: ' . (string)$this->offset . ') ';
     }
 }
