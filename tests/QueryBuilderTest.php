@@ -117,13 +117,14 @@ final class QueryBuilderTest extends TestCase
             ->addFieldFilter(['username', 'ip'])
             ->addKeyFilter(KeyFilter::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
             ->addMap('r with name: r.user')
-            ->addGroup(['_field', 'ip']);
+            ->addGroup(['_field', 'ip'])
+            ->addLimit(1);
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
             '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => ' .
             'r._field == "username" or r._field == "ip") |> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) ' .
-            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") ';
+            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") |> limit(n: 1, offset: 0) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
@@ -176,12 +177,13 @@ final class QueryBuilderTest extends TestCase
             ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
             ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
             ->fromMeasurement('test_measurement')
-            ->addRawFunction('|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time")');
+            ->addRawFunction('|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time")')
+            ->addLimit(50, 100);
 
         $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
             '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-            '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") ';
+            '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") |> limit(n: 50, offset: 100) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
