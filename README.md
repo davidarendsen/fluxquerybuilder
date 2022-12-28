@@ -10,7 +10,7 @@ composer require arendsen/fluxquerybuilder
 ```
 
 ## Documentation 
-The documentation of this project is available in the [doc folder](docs/00-index.md).
+The documentation of this project is available in the [docs folder](docs/00-index.md).
 
 ## Testing
 

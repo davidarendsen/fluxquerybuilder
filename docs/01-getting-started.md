@@ -7,14 +7,13 @@ Install the package with composer:
 composer require arendsen/fluxquerybuilder
 ```
 
+The most basic Flux query can be made with the following code. It has filters for fields and tags.
 
 ```php
 <?php
 
 use Arendsen\FluxQueryBuilder\QueryBuilder;
 use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
-use Arendsen\FluxQueryBuilder\Expression\Map;
-use Arendsen\FluxQueryBuilder\Expression\Selection;
 
 $queryBuilder = new QueryBuilder();
 $queryBuilder->fromBucket('test_bucket')
@@ -25,7 +24,7 @@ $queryBuilder->fromBucket('test_bucket')
         KeyFilter::setEqualTo('_field', 'username')
             ->orEqualTo('_field', 'email')
     )
-    ->limit(50);
+    ->limit(50, 100);
 
 echo $queryBuilder->build();
 ```
@@ -42,5 +41,5 @@ from(bucket: "test_bucket")
     |> filter(fn: (r) => 
         r._field == "username" or r._field == "email"
     ) 
-    |> limit(n: 50, offset: 0)
+    |> limit(n: 50, offset: 100)
 ```
