@@ -12,7 +12,10 @@ composer require arendsen/fluxquerybuilder
 ## Documentation 
 The documentation of this project is available in the [docs folder](docs/00-index.md).
 
+Go directly to our [Getting started page](docs/01-getting-started.md)
+
 ## Testing
+To execute the testing suite:
 
 ```
 composer test

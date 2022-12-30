@@ -21,8 +21,8 @@ $queryBuilder->fromBucket('test_bucket')
     ->fromMeasurement('test_measurement')
     ->addFieldFilter(['username', 'email'])
     ->addKeyFilter(
-        KeyFilter::setEqualTo('_field', 'username')
-            ->orEqualTo('_field', 'email')
+        KeyFilter::setEqualTo('username', 'David')
+            ->andEqualTo('email', 'david@example.com')
     )
     ->limit(50, 100);
 
@@ -39,7 +39,9 @@ from(bucket: "test_bucket")
         r._field == "username" or r._field == "email"
     ) 
     |> filter(fn: (r) => 
-        r._field == "username" or r._field == "email"
+        r.username == "David" and r.email == "david@example.com"
     ) 
     |> limit(n: 50, offset: 100)
 ```
+
+For a deeper dive into the possible methods of the Query builder you can check [this page](04-functions.md).
