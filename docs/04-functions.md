@@ -8,3 +8,4 @@ On this page you will find the methods you can use in the query builder.
 * [addDuplicate()](functions/addDuplicate.md)
 * [addGroup()](functions/addGroup.md)
 * [addLimit()](functions/addLimit.md)
+* [addMean()](functions/addMean.md)
