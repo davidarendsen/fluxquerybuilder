@@ -8,18 +8,30 @@
   <tbody>
     <tr>
       <th>Name</th>
+      <th>Required</th>
       <th>Data type</th>
       <th>Description</th>
     </tr>
     <tr>
       <td>columns</td>
+      <td>Yes</td>
       <td>array</td>
       <td>List of columns to use in the grouping operation.</td>
     </tr>
     <tr>
       <td>mode</td>
+      <td>No</td>
       <td>string</td>
-      <td>Grouping mode. Default is 'by'.</td>
+      <td>
+        Grouping mode. Default is 'by'. <br/>Available modes:
+        <ul>
+          <li>
+            by: Group by columns defined in the columns parameter.
+          </li>
+          <li>except: Group by all columns except those in defined in the columns parameter.
+          </li>
+        </ul>
+      </td>
     </tr>
 
   </tbody>

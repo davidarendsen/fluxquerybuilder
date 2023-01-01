@@ -8,11 +8,13 @@
   <tbody>
     <tr>
       <th>Name</th>
+      <th>Required</th>
       <th>Data type</th>
       <th>Description</th>
     </tr>
     <tr>
       <td>column</td>
+      <td>Yes</td>
       <td>string</td>
       <td>Column to use to compute means. Default is '_value'.</td>
     </tr>

@@ -8,16 +8,19 @@
   <tbody>
     <tr>
       <th>Name</th>
+      <th>Required</th>
       <th>Data type</th>
       <th>Description</th>
     </tr>
     <tr>
       <td>n</td>
+      <td>Yes</td>
       <td>integer</td>
       <td>Maximum number of rows to return.</td>
     </tr>
     <tr>
       <td>offset</td>
+      <td>No</td>
       <td>integer</td>
       <td>Number of rows to skip per table before limiting to <u>n</u>. Default is 0.</td>
     </tr>

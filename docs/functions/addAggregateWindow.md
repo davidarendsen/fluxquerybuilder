@@ -8,21 +8,25 @@
   <tbody>
     <tr>
       <th>Name</th>
+      <th>Required</th>
       <th>Data type</th>
       <th>Description</th>
     </tr>
     <tr>
       <td>every</td>
+      <td>Yes</td>
       <td>string</td>
       <td>Duration of time between windows.</td>
     </tr>
     <tr>
       <td>fn</td>
+      <td>Yes</td>
       <td>string</td>
       <td>Aggregate or selector function to apply to each time window.</td>
     </tr>
     <tr>
       <td>options</td>
+      <td>No</td>
       <td>array</td>
       <td>
         <ul>

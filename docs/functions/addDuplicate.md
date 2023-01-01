@@ -8,20 +8,22 @@
   <tbody>
     <tr>
       <th>Name</th>
+      <th>Required</th>
       <th>Data type</th>
       <th>Description</th>
     </tr>
     <tr>
       <td>column</td>
+      <td>Yes</td>
       <td>string</td>
       <td>Column to duplicate.</td>
     </tr>
     <tr>
       <td>as</td>
+      <td>Yes</td>
       <td>string</td>
       <td>Name to assign to the duplicate column.</td>
     </tr>
-
   </tbody>
 </table>
 

@@ -8,11 +8,13 @@
   <tbody>
     <tr>
       <th>Name</th>
+      <th>Required</th>
       <th>Data type</th>
       <th>Description</th>
     </tr>
     <tr>
       <td>input</td>
+      <td>Yes</td>
       <td>string</td>
       <td>Insert any Flux function here.</td>
     </tr>
