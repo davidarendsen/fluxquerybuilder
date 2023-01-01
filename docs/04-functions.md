@@ -9,4 +9,5 @@ On this page you will find the methods you can use in the query builder.
 * [addGroup()](functions/addGroup.md)
 * [addLimit()](functions/addLimit.md)
 * [addMean()](functions/addMean.md)
+* [addRange()](functions/addRange.md)
 * [addRawFunction()](functions/addRawFunction.md)
