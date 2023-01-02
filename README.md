@@ -30,6 +30,6 @@ composer check
 composer format
 ```
 
-## Licence
+## License
 
 This software is released under the [MIT license](LICENSE).
