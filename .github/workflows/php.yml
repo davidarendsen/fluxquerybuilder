@@ -34,3 +34,6 @@ jobs:
 
       - name: Run test suite
         run: composer run-script test
+
+      - name: Check coding style according to PSR-12
+        run: composer run-script check
