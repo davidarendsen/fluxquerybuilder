@@ -124,7 +124,8 @@ final class QueryBuilderTest extends TestCase
             '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
             '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => ' .
             'r._field == "username" or r._field == "ip") |> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) ' .
-            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") |> limit(n: 1, offset: 0) ';
+            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") ' .
+            '|> limit(n: 1, offset: 0) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
