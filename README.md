@@ -32,4 +32,4 @@ composer format
 
 ## Licence
 
-This software is released under the [MIT licence](LICENSE).
+This software is released under the [MIT license](LICENSE).
