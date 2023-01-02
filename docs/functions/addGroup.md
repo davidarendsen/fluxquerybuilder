@@ -28,7 +28,7 @@
           <li>
             by: Group by columns defined in the columns parameter.
           </li>
-          <li>except: Group by all columns except those in defined in the columns parameter.
+          <li>except: Group by all columns except those defined in the columns parameter.
           </li>
         </ul>
       </td>

@@ -16,7 +16,7 @@
       <td>column</td>
       <td>Yes</td>
       <td>string</td>
-      <td>Column to use to compute means. Default is '_value'.</td>
+      <td>Column to use to compute 'means'. Default is '_value'.</td>
     </tr>
   </tbody>
 </table>
