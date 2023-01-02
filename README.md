@@ -6,6 +6,8 @@ With this query builder you can build queries for Flux. Flux is a powerful open 
 [![License](http://poser.pugx.org/arendsen/fluxquerybuilder/license)](https://packagist.org/packages/arendsen/fluxquerybuilder) 
 [![PHP Version Require](http://poser.pugx.org/arendsen/fluxquerybuilder/require/php)](https://packagist.org/packages/arendsen/fluxquerybuilder)
 
+[![Tests](https://github.com/davidarendsen/fluxquerybuilder/actions/workflows/php.yml/badge.svg)](https://github.com/davidarendsen/fluxquerybuilder/actions/workflows/php.yml)
+
 ## Documentation 
 The documentation of this project is available in the [docs folder](docs/00-index.md).
 
