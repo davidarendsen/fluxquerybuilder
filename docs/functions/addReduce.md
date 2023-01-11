@@ -38,12 +38,12 @@ use Arendsen\FluxQueryBuilder\Type\MathType;
 
 ```php
 ->addReduce([
-  [
-    'count' => new MathType('accumulator.count + 1'),
-  ],
-  [
-    'count' => 0,
-  ]
+    [
+        'count' => new MathType('accumulator.count + 1'),
+    ],
+    [
+        'count' => 0,
+    ]
 ])
 ```
 

@@ -26,10 +26,10 @@
 
 ```php
 ->from([
-  'bucket' => 'test_bucket',
-  'host' => 'https://us-west-2-1.aws.cloud2.influxdata.com',
-  'org' => 'example-org',
-  'token' => 'token'
+    'bucket' => 'test_bucket',
+    'host' => 'https://us-west-2-1.aws.cloud2.influxdata.com',
+    'org' => 'example-org',
+    'token' => 'token'
 ])
 ```
 
