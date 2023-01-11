@@ -7,19 +7,9 @@ use Exception;
 use Arendsen\FluxQueryBuilder\Builder\FluxPart;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
-use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
-use Arendsen\FluxQueryBuilder\Functions\Duplicate;
 use Arendsen\FluxQueryBuilder\Functions\Filter;
 use Arendsen\FluxQueryBuilder\Functions\From;
 use Arendsen\FluxQueryBuilder\Functions\Range;
-use Arendsen\FluxQueryBuilder\Functions\Reduce;
-use Arendsen\FluxQueryBuilder\Functions\Sort;
-use Arendsen\FluxQueryBuilder\Functions\Map;
-use Arendsen\FluxQueryBuilder\Functions\Group;
-use Arendsen\FluxQueryBuilder\Functions\Limit;
-use Arendsen\FluxQueryBuilder\Functions\Mean;
-use Arendsen\FluxQueryBuilder\Functions\RawFunction;
-use Arendsen\FluxQueryBuilder\Functions\Window;
 
 abstract class AbstractQueryBuilder
 {
