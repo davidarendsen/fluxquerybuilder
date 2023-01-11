@@ -5,7 +5,7 @@
 On this page you will find the methods you can use in the query builder.
 
 * [from()](functions/from.md)
-* [fromBucket()](functions/fromBucket.md)
+or [fromBucket()](functions/fromBucket.md)
 * [fromMeasurement()](functions/fromMeasurement.md)
 * [addAggregateWindow()](functions/addAggregateWindow.md)
 * [addDuplicate()](functions/addDuplicate.md)
@@ -13,5 +13,8 @@ On this page you will find the methods you can use in the query builder.
 * [addLimit()](functions/addLimit.md)
 * [addMean()](functions/addMean.md)
 * [addRangeStart()](functions/addRangeStart.md)
-* [addRangeInBetween()](functions/addRangeInBetween.md)
+or [addRangeInBetween()](functions/addRangeInBetween.md)
+* [addReduce()](functions/addReduce.md)
+
+Anything missing here? You can use this method to add anything to the query:
 * [addRawFunction()](functions/addRawFunction.md)
