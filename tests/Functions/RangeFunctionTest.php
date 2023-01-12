@@ -37,7 +37,7 @@ final class RangeFunctionTest extends TestCase
     {
         $expression = new Range(
             new DateTime('2022-08-12 17:31:00'),
-            new DateTime('2022-08-12 18:31:00'),
+            new DateTime('2022-08-12 18:31:00')
         );
 
         $expected = '|> range(start: time(v: 2022-08-12T17:31:00Z), stop: time(v: 2022-08-12T18:31:00Z)) ';
