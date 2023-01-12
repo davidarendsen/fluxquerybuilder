@@ -34,9 +34,9 @@ final class MapFunctionTest extends TestCase
         $expression = new Map(MapExpression::columns([
             'time' => 'r._time',
             'source' => 'r.tag',
-            'alert' => SelectionExpression::if('r._value > 10')->then(true)->else(false),
-            'test' => SelectionExpression::if('r._value > 10')->then('yes')->else('no')
-        ]));
+            'alert' => SelectionExpression::if('r._value > 10')->then(true)->else(false)->__toString(),
+            'test' => SelectionExpression::if('r._value > 10')->then('yes')->else('no')->__toString()
+        ])->__toString());
 
         $query = '|> map(fn: (r) => ({ {time: r._time, source: r.tag, ' .
             'alert: if r._value > 10 then true else false, ' .

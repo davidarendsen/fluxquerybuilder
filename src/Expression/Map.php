@@ -10,14 +10,16 @@ class Map extends Base
 
     public static function with(string $name, string $content): Map
     {
-        self::$string = 'r with ' . $name . ': ' . $content;
-        return new self();
+        $object = new self();
+        $object::$string = 'r with ' . $name . ': ' . $content;
+        return $object;
     }
 
     public static function columns(array $columns)
     {
-        self::$string = new FieldRecordType($columns);
-        return new self();
+        $object = new self();
+        $object::$string = new FieldRecordType($columns);
+        return $object;
     }
 
     public function __toString()
