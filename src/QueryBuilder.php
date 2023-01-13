@@ -2,117 +2,71 @@
 
 namespace Arendsen\FluxQueryBuilder;
 
-use Arendsen\FluxQueryBuilder\Builder\AbstractQueryBuilder;
-use Arendsen\FluxQueryBuilder\Builder\FluxPart;
-use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
-use Arendsen\FluxQueryBuilder\Functions\Duplicate;
-use Arendsen\FluxQueryBuilder\Functions\Reduce;
-use Arendsen\FluxQueryBuilder\Functions\Sort;
-use Arendsen\FluxQueryBuilder\Functions\Map;
-use Arendsen\FluxQueryBuilder\Functions\Group;
-use Arendsen\FluxQueryBuilder\Functions\Limit;
-use Arendsen\FluxQueryBuilder\Functions\Mean;
-use Arendsen\FluxQueryBuilder\Functions\RawFunction;
-use Arendsen\FluxQueryBuilder\Functions\Window;
+use Exception;
+use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
+use Arendsen\FluxQueryBuilder\Builder\Basics;
+use Arendsen\FluxQueryBuilder\Builder\Universe;
 
-class QueryBuilder extends AbstractQueryBuilder
+class QueryBuilder implements QueryBuilderInterface
 {
-    public function addReduce(array $settings, array $identity): QueryBuilder
+    use Basics;
+    use Universe;
+
+    public const REQUIRED_INPUT_FROM = 'from';
+    public const REQUIRED_INPUT_RANGE = 'range';
+    public const REQUIRED_INPUT_MEASUREMENT = 'measurement';
+
+    public const REQUIRED_INPUT = [
+        self::REQUIRED_INPUT_FROM,
+        self::REQUIRED_INPUT_RANGE,
+        self::REQUIRED_INPUT_MEASUREMENT,
+    ];
+
+    /**
+     * @var int $currentFluxQueryPart
+     */
+    private $currentFluxQueryPart = 0;
+
+    /**
+     * @var array $fluxQuery
+     */
+    private $fluxQueryParts = [];
+
+    /**
+     * @var array $requiredData
+     */
+    private $requiredData = [];
+
+    protected function addToQuery($key, $query)
     {
-        $this->addToQuery(
-            FluxPart::REDUCE,
-            new Reduce($settings, $identity)
-        );
-        return $this;
+        $this->fluxQueryParts[$this->currentFluxQueryPart] = $query;
+        $this->currentFluxQueryPart++;
     }
 
-    public function addSort(array $columns, $desc): QueryBuilder
+    public function build(): string
     {
-        $this->addToQuery(
-            FluxPart::SORT,
-            new Sort($columns, $desc)
-        );
-        return $this;
+        $this->checkRequired();
+
+        $query = '';
+
+        foreach ($this->fluxQueryParts as $part) {
+            $query .= $part;
+        }
+
+        return $query;
     }
 
-    public function addMap($query): QueryBuilder
+    protected function addRequiredData(string $key, $value)
     {
-        $this->addToQuery(
-            FluxPart::MAP,
-            new Map($query)
-        );
-        return $this;
+        $this->requiredData[][$key] = $value;
     }
 
-    public function addGroup(array $columns, $mode = 'by'): QueryBuilder
+    protected function checkRequired()
     {
-        $this->addToQuery(
-            FluxPart::GROUP,
-            new Group($columns, $mode)
-        );
-        return $this;
-    }
-
-    public function addLimit(int $limit, int $offset = 0): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::LIMIT,
-            new Limit($limit, $offset)
-        );
-        return $this;
-    }
-
-    public function addWindow($every, array $options = []): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::WINDOW,
-            new Window($every, $options)
-        );
-        return $this;
-    }
-
-    public function addDuplicate(string $column, string $as): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::DUPLICATE,
-            new Duplicate($column, $as)
-        );
-        return $this;
-    }
-
-    public function addMean(?string $column = ''): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::MEAN,
-            new Mean($column)
-        );
-        return $this;
-    }
-
-    public function addUnWindow(): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::UNWINDOW,
-            new Window('inf')
-        );
-        return $this;
-    }
-
-    public function addAggregateWindow($every, $fn, array $options = []): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::AGGREGATEWINDOW,
-            new AggregateWindow($every, $fn, $options)
-        );
-        return $this;
-    }
-
-    public function addRawFunction(string $input): QueryBuilder
-    {
-        $this->addToQuery(
-            FluxPart::RAWFUNCTION,
-            new RawFunction($input)
-        );
-        return $this;
+        foreach (self::REQUIRED_INPUT as $key => $input) {
+            if (!isset($this->requiredData[$key][$input])) {
+                throw new Exception('You need to define the "' . $input . '" part of the query!');
+            }
+        }
     }
 }
