@@ -3,7 +3,6 @@
 namespace Arendsen\FluxQueryBuilder\Builder;
 
 use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
-use Arendsen\FluxQueryBuilder\Builder\FluxPart;
 use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
 use Arendsen\FluxQueryBuilder\Functions\Duplicate;
 use Arendsen\FluxQueryBuilder\Functions\Reduce;

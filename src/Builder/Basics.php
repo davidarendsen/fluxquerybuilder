@@ -5,7 +5,6 @@ namespace Arendsen\FluxQueryBuilder\Builder;
 use DateTime;
 use Arendsen\FluxQueryBuilder\QueryBuilder;
 use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
-use Arendsen\FluxQueryBuilder\Builder\FluxPart;
 use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
 use Arendsen\FluxQueryBuilder\Functions\Filter;

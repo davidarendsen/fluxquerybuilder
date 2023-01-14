@@ -16,6 +16,7 @@ class QueryBuilder implements QueryBuilderInterface
     use Universe;
 
     /**
+     * The required Flux query parts and the correct order.
      * Depends on Basics trait
      */
     public const REQUIRED_FLUX_QUERY_PARTS = [
@@ -25,7 +26,7 @@ class QueryBuilder implements QueryBuilderInterface
     ];
 
     /**
-     * @var array $fluxQuery
+     * @var array $fluxQueryParts
      */
     private $fluxQueryParts = [];
 
