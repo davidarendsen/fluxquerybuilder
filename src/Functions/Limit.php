@@ -9,6 +9,11 @@ class Limit extends Base
      */
     private $limit;
 
+    /**
+     * @var int $offset
+     */
+    private $offset;
+
     public function __construct(int $limit, int $offset = 0)
     {
         $this->limit = $limit;

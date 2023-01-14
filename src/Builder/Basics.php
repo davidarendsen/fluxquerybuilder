@@ -10,6 +10,7 @@ use Arendsen\FluxQueryBuilder\Expression\KeyValue;
 use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
 use Arendsen\FluxQueryBuilder\Functions\Filter;
 use Arendsen\FluxQueryBuilder\Functions\From;
+use Arendsen\FluxQueryBuilder\Functions\Measurement;
 use Arendsen\FluxQueryBuilder\Functions\Range;
 use Arendsen\FluxQueryBuilder\Functions\RawFunction;
 
@@ -17,9 +18,7 @@ trait Basics
 {
     public function from(array $from): QueryBuilderInterface
     {
-        $this->addRequiredData(QueryBuilder::REQUIRED_INPUT_FROM, $from);
         $this->addToQuery(
-            FluxPart::FROM,
             new From($from)
         );
         return $this;
@@ -27,14 +26,14 @@ trait Basics
 
     public function fromBucket(string $bucket): QueryBuilderInterface
     {
-        $this->from(['bucket' => $bucket]);
-        return $this;
+        return $this->from(['bucket' => $bucket]);
     }
 
     public function fromMeasurement(string $measurement): QueryBuilderInterface
     {
-        $this->addRequiredData(QueryBuilder::REQUIRED_INPUT_MEASUREMENT, $measurement);
-        $this->addKeyFilter(KeyFilter::setEqualTo('_measurement', $measurement));
+        $this->addToQuery(
+            new Measurement($measurement)
+        );
         return $this;
     }
 
@@ -47,7 +46,6 @@ trait Basics
     public function addFilter(KeyValue $keyValue): QueryBuilderInterface
     {
         $this->addToQuery(
-            FluxPart::FILTERS,
             new Filter($keyValue)
         );
         return $this;
@@ -56,7 +54,6 @@ trait Basics
     public function addKeyFilter(KeyFilter $keyFilter): QueryBuilderInterface
     {
         $this->addToQuery(
-            FluxPart::FILTERS,
             new Filter($keyFilter)
         );
         return $this;
@@ -65,7 +62,6 @@ trait Basics
     public function addFieldFilter(array $fields): QueryBuilderInterface
     {
         $this->addToQuery(
-            FluxPart::FILTERS,
             new Filter($fields)
         );
         return $this;
@@ -73,9 +69,7 @@ trait Basics
 
     public function addRange(DateTime $start, ?DateTime $stop = null): QueryBuilderInterface
     {
-        $this->addRequiredData(QueryBuilder::REQUIRED_INPUT_RANGE, [$start, $stop]);
         $this->addToQuery(
-            FluxPart::RANGE,
             new Range($start, $stop)
         );
         return $this;
@@ -96,7 +90,6 @@ trait Basics
     public function addRawFunction(string $input): QueryBuilderInterface
     {
         $this->addToQuery(
-            FluxPart::RAWFUNCTION,
             new RawFunction($input)
         );
         return $this;

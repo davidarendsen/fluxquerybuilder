@@ -5,6 +5,7 @@ namespace Arendsen\FluxQueryBuilder\Builder;
 class FluxPart
 {
     public const FROM = 'from';
+    public const MEASUREMENT = 'measurement';
     public const RANGE = 'range';
     public const FILTERS = 'filters';
     public const REDUCE = 'reduce';

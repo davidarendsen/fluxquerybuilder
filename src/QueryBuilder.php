@@ -6,26 +6,23 @@ use Exception;
 use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
 use Arendsen\FluxQueryBuilder\Builder\Basics;
 use Arendsen\FluxQueryBuilder\Builder\Universe;
+use Arendsen\FluxQueryBuilder\Functions\From;
+use Arendsen\FluxQueryBuilder\Functions\Measurement;
+use Arendsen\FluxQueryBuilder\Functions\Range;
 
 class QueryBuilder implements QueryBuilderInterface
 {
     use Basics;
     use Universe;
 
-    public const REQUIRED_INPUT_FROM = 'from';
-    public const REQUIRED_INPUT_RANGE = 'range';
-    public const REQUIRED_INPUT_MEASUREMENT = 'measurement';
-
-    public const REQUIRED_INPUT = [
-        self::REQUIRED_INPUT_FROM,
-        self::REQUIRED_INPUT_RANGE,
-        self::REQUIRED_INPUT_MEASUREMENT,
-    ];
-
     /**
-     * @var int $currentFluxQueryPart
+     * Depends on Basics trait
      */
-    private $currentFluxQueryPart = 0;
+    public const REQUIRED_FLUX_QUERY_PARTS = [
+        From::class,
+        Range::class,
+        Measurement::class,
+    ];
 
     /**
      * @var array $fluxQuery
@@ -37,10 +34,15 @@ class QueryBuilder implements QueryBuilderInterface
      */
     private $requiredData = [];
 
-    protected function addToQuery($key, $query)
+    protected function addToQuery($query)
     {
-        $this->fluxQueryParts[$this->currentFluxQueryPart] = $query;
-        $this->currentFluxQueryPart++;
+        $this->fluxQueryParts[] = $query;
+
+        foreach (self::REQUIRED_FLUX_QUERY_PARTS as $input) {
+            if ($query instanceof $input) {
+                $this->requiredData[] = $query;
+            }
+        }
     }
 
     public function build(): string
@@ -56,15 +58,12 @@ class QueryBuilder implements QueryBuilderInterface
         return $query;
     }
 
-    protected function addRequiredData(string $key, $value)
-    {
-        $this->requiredData[][$key] = $value;
-    }
-
     protected function checkRequired()
     {
-        foreach (self::REQUIRED_INPUT as $key => $input) {
-            if (!isset($this->requiredData[$key][$input])) {
+        foreach (self::REQUIRED_FLUX_QUERY_PARTS as $key => $input) {
+            if (isset($this->requiredData[$key]) && !$this->requiredData[$key] instanceof $input) {
+                throw new Exception('You need to put the "' . $input . '" part of the query in the correct order!');
+            } elseif (!isset($this->requiredData[$key])) {
                 throw new Exception('You need to define the "' . $input . '" part of the query!');
             }
         }
