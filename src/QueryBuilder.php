@@ -6,9 +6,6 @@ use Exception;
 use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
 use Arendsen\FluxQueryBuilder\Builder\Basics;
 use Arendsen\FluxQueryBuilder\Builder\Universe;
-use Arendsen\FluxQueryBuilder\Functions\From;
-use Arendsen\FluxQueryBuilder\Functions\Measurement;
-use Arendsen\FluxQueryBuilder\Functions\Range;
 
 class QueryBuilder implements QueryBuilderInterface
 {
@@ -16,14 +13,9 @@ class QueryBuilder implements QueryBuilderInterface
     use Universe;
 
     /**
-     * The required Flux query parts and the correct order.
-     * Depends on Basics trait
+     * @var array $requiredFluxQueryParts
      */
-    public const REQUIRED_FLUX_QUERY_PARTS = [
-        From::class,
-        Range::class,
-        Measurement::class,
-    ];
+    private $requiredFluxQueryParts = [];
 
     /**
      * @var array $fluxQueryParts
@@ -39,7 +31,7 @@ class QueryBuilder implements QueryBuilderInterface
     {
         $this->fluxQueryParts[] = $query;
 
-        foreach (self::REQUIRED_FLUX_QUERY_PARTS as $input) {
+        foreach ($this->requiredFluxQueryParts as $input) {
             if ($query instanceof $input) {
                 $this->requiredData[] = $query;
             }
@@ -61,7 +53,7 @@ class QueryBuilder implements QueryBuilderInterface
 
     protected function checkRequired()
     {
-        foreach (self::REQUIRED_FLUX_QUERY_PARTS as $key => $input) {
+        foreach ($this->requiredFluxQueryParts as $key => $input) {
             if (isset($this->requiredData[$key]) && !$this->requiredData[$key] instanceof $input) {
                 throw new Exception('You need to put the "' . $input . '" part of the query in the correct order!');
             } elseif (!isset($this->requiredData[$key])) {

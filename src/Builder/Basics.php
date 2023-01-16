@@ -17,9 +17,12 @@ trait Basics
 {
     public function from(array $from): QueryBuilderInterface
     {
+        $this->setRequirements();
+
         $this->addToQuery(
             new From($from)
         );
+
         return $this;
     }
 
@@ -30,6 +33,8 @@ trait Basics
 
     public function fromMeasurement(string $measurement): QueryBuilderInterface
     {
+        $this->setRequirements();
+
         $this->addToQuery(
             new Measurement($measurement)
         );
@@ -44,6 +49,8 @@ trait Basics
      */
     public function addFilter(KeyValue $keyValue): QueryBuilderInterface
     {
+        $this->setRequirements();
+
         $this->addToQuery(
             new Filter($keyValue)
         );
@@ -52,6 +59,8 @@ trait Basics
 
     public function addKeyFilter(KeyFilter $keyFilter): QueryBuilderInterface
     {
+        $this->setRequirements();
+
         $this->addToQuery(
             new Filter($keyFilter)
         );
@@ -60,6 +69,8 @@ trait Basics
 
     public function addFieldFilter(array $fields): QueryBuilderInterface
     {
+        $this->setRequirements();
+
         $this->addToQuery(
             new Filter($fields)
         );
@@ -68,6 +79,8 @@ trait Basics
 
     public function addRange(DateTime $start, ?DateTime $stop = null): QueryBuilderInterface
     {
+        $this->setRequirements();
+
         $this->addToQuery(
             new Range($start, $stop)
         );
@@ -92,5 +105,14 @@ trait Basics
             new RawFunction($input)
         );
         return $this;
+    }
+
+    private function setRequirements()
+    {
+        $this->requiredFluxQueryParts = [
+            From::class,
+            Range::class,
+            Measurement::class,
+        ];
     }
 }
