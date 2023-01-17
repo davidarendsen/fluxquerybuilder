@@ -12,6 +12,7 @@ use Arendsen\FluxQueryBuilder\Functions\Group;
 use Arendsen\FluxQueryBuilder\Functions\Limit;
 use Arendsen\FluxQueryBuilder\Functions\Mean;
 use Arendsen\FluxQueryBuilder\Functions\Window;
+use Arendsen\FluxQueryBuilder\Functions\Sum;
 
 trait Universe
 {
@@ -91,6 +92,14 @@ trait Universe
     {
         $this->addToQuery(
             new AggregateWindow($every, $fn, $options)
+        );
+        return $this;
+    }
+
+    public function addSum(string $column): QueryBuilderInterface
+    {
+        $this->addToQuery(
+            new Sum($column)
         );
         return $this;
     }

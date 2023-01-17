@@ -188,4 +188,22 @@ final class QueryBuilderTest extends TestCase
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
+
+    public function testQueryWithSum()
+    {
+        $queryBuilder = new QueryBuilder();
+        $queryBuilder->fromBucket('test_bucket')
+            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
+            ->fromMeasurement('test_measurement')
+            ->addKeyFilter(KeyFilter::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
+            ->addSum('_value')
+            ->addFieldFilter(['username', 'ip']);
+
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
+            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
+            '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> sum(column: "_value") ' .
+            '|> filter(fn: (r) => r._field == "username" or r._field == "ip") ';
+
+        $this->assertEquals($expectedQuery, $queryBuilder->build());
+    }
 }
