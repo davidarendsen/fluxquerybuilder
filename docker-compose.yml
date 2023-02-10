@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  code:
+    image: busybox
+    command: /bin/true
+    container_name: fluxquerybuilder
+    networks:
+      - api
+
+  php:
+    build: ./docker/php
+    container_name: fluxquerybuilder_php
+    volumes:
+      - ./:/var/www
+    networks:
+      - api
+
+
+networks:
+  api:
+    driver: bridge
