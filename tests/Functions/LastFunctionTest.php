@@ -9,21 +9,21 @@ use PHPUnit\Framework\TestCase;
 
 final class LastFunctionTest extends TestCase
 {
-	public function testSimpleLast()
-	{
-		$expression = new Last();
+    public function testSimpleLast()
+    {
+        $expression = new Last();
 
-		$query = '|> last(column: "_value") ';
+        $query = '|> last(column: "_value") ';
 
-		$this->assertEquals($query, $expression->__toString());
-	}
+        $this->assertEquals($query, $expression->__toString());
+    }
 
-	public function testLastWithValue()
-	{
-		$expression = new Last('something');
+    public function testLastWithValue()
+    {
+        $expression = new Last('something');
 
-		$query = '|> last(column: "something") ';
+        $query = '|> last(column: "something") ';
 
-		$this->assertEquals($query, $expression->__toString());
-	}
+        $this->assertEquals($query, $expression->__toString());
+    }
 }

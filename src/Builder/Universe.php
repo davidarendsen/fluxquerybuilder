@@ -105,11 +105,11 @@ trait Universe
         return $this;
     }
 
-	public function addLast(string $column = '_value'): QueryBuilderInterface
-	{
-		$this->addToQuery(
-			new Last($column)
-		);
-		return $this;
-	}
+    public function addLast(string $column = '_value'): QueryBuilderInterface
+    {
+        $this->addToQuery(
+            new Last($column)
+        );
+        return $this;
+    }
 }
