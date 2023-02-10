@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Closure;
 use DateTime;
 use Exception;
 use Arendsen\FluxQueryBuilder\Expression\KeyFilter;
@@ -189,5 +190,37 @@ final class QueryBuilderTest extends TestCase
             '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
+    }
+
+    public function testCorrectInstancesAreCreated()
+    {
+        $queryBuilder = new QueryBuilder();
+        $queryBuilder->fromBucket('test_bucket')
+            ->addRangeStart(new DateTime('2022-08-12 17:31:00'));
+
+        $instances = [
+            \Arendsen\FluxQueryBuilder\Functions\From::class,
+            \Arendsen\FluxQueryBuilder\Functions\Range::class,
+            \Arendsen\FluxQueryBuilder\Functions\Measurement::class,
+        ];
+
+        $requiredFluxQueryParts = $this->getClassProperty($queryBuilder, 'requiredFluxQueryParts');
+
+        foreach ($requiredFluxQueryParts as $keyPart => $part) {
+            $this->assertEquals($instances[$keyPart], $part);
+        }
+    }
+
+    private function getClassProperty($object, string $property): array
+    {
+        $propertyReader = function & ($object, $property) {
+            $value = & Closure::bind(function & () use ($property) {
+                return $this->$property;
+            }, $object, $object)->__invoke();
+
+            return $value;
+        };
+
+        return $propertyReader($object, $property);
     }
 }
