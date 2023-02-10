@@ -15,45 +15,105 @@ use Arendsen\FluxQueryBuilder\Type\MathType;
 final class QueryBuilderTest extends TestCase
 {
     /**
-     * @dataProvider simpleQueryProvider
+     * @dataProvider newTestsProvider
      */
-    public function testSimpleQuery($bucket, $measurement, $range, $keyFilter, $expectedQuery)
+    public function testBasicQuery(string $methodName, array $params = [], string $expected = '')
     {
         $queryBuilder = new QueryBuilder();
-        $queryBuilder->from($bucket)
-            ->addRangeStart($range)
-            ->fromMeasurement($measurement);
+        $queryBuilder->fromBucket('test_bucket')
+            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
+            ->fromMeasurement('test_measurement');
 
-        if ($keyFilter) {
-            $queryBuilder->addKeyFilter($keyFilter);
-        }
+        call_user_func_array([$queryBuilder, $methodName], $params);
+
+        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
+            '|> filter(fn: (r) => r._measurement == "test_measurement") ' . $expected;
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
 
-    public function simpleQueryProvider(): array
+    public function newTestsProvider(): array
     {
         return [
-            'basic query' => [
-                [
-                    'bucket' => 'example_bucket',
-                ],
-                'test_measurement',
-                new DateTime('2022-08-12 23:05:00'),
-                null,
-                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T23:05:00Z)) ' .
-                    '|> filter(fn: (r) => r._measurement == "test_measurement") '
+            'addAggregateWindow' => [
+                'addAggregateWindow',
+                ['20s', 'mean', ['timeDst' => '_time']],
+                '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") '
             ],
-            'query with filter' => [
-                [
-                    'bucket' => 'example_bucket',
-                ],
-                'test_measurement',
-                new DateTime('2022-08-12 20:05:00'),
-                KeyFilter::setEqualTo('user', 'username'),
-                'from(bucket: "example_bucket") |> range(start: time(v: 2022-08-12T20:05:00Z)) ' .
-                    '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-                    '|> filter(fn: (r) => r.user == "username") '
+            'addDuplicate' => [
+                'addDuplicate',
+                ['old_name', 'new_name'],
+                '|> duplicate(column: "old_name", as: "new_name") '
+            ],
+            'addFilter' => [
+                'addFilter',
+                [KeyValue::setGreaterOrEqualTo('count', 2)->andGreaterOrEqualTo('count2', 3)],
+                '|> filter(fn: (r) => r.count >= 2 and r.count2 >= 3) '
+            ],
+            'addKeyFilter' => [
+                'addKeyFilter',
+                [KeyFilter::setEqualTo('user', 'username')],
+                '|> filter(fn: (r) => r.user == "username") '
+            ],
+            'addFieldFilter' => [
+                'addFieldFilter',
+                [['email', 'username']],
+                '|> filter(fn: (r) => r._field == "email" or r._field == "username") '
+            ],
+            'addGroup' => [
+                'addGroup',
+                [['_field', 'ip']],
+                '|> group(columns: ["_field", "ip"], mode: "by") '
+            ],
+            'addLast' => [
+                'addLast',
+                ['something'],
+                '|> last(column: "something") '
+            ],
+            'addLimit' => [
+                'addLimit',
+                [20, 40],
+                '|> limit(n: 20, offset: 40) '
+            ],
+            'addMap' => [
+                'addMap',
+                ['r with name: r.user'],
+                '|> map(fn: (r) => ({ r with name: r.user })) '
+            ],
+            'addMean' => [
+                'addMean',
+                [],
+                '|> mean() '
+            ],
+            'addRawFunction' => [
+                'addRawFunction',
+                ['|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time")'],
+                '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") '
+            ],
+            'addReduce' => [
+                'addReduce',
+                [['count' => new MathType('accumulator.count + 1')], ['count' => 0]],
+                '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) '
+            ],
+            'addSort' => [
+                'addSort',
+                [['column1', 'column2'], true],
+                '|> sort(columns: ["column1", "column2"], desc: true) '
+            ],
+            'addSum' => [
+                'addSum',
+                ['something'],
+                '|> sum(column: "something") '
+            ],
+            'addUnwindow' => [
+                'addUnwindow',
+                [],
+                '|> window(every: inf) '
+            ],
+            'addWindow' => [
+                'addWindow',
+                ['20s'],
+                '|> window(every: 20s) '
             ],
         ];
     }
@@ -107,29 +167,6 @@ final class QueryBuilderTest extends TestCase
         $queryBuilder->build();
     }
 
-    public function testComplexQuery()
-    {
-        $queryBuilder = new QueryBuilder();
-        $queryBuilder->fromBucket('test_bucket')
-            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
-            ->fromMeasurement('test_measurement')
-            ->addFieldFilter(['username', 'ip'])
-            ->addKeyFilter(KeyFilter::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
-            ->addMap('r with name: r.user')
-            ->addGroup(['_field', 'ip'])
-            ->addLimit(1);
-
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
-            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-            '|> filter(fn: (r) => r._measurement == "test_measurement") |> filter(fn: (r) => ' .
-            'r._field == "username" or r._field == "ip") |> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) ' .
-            '|> map(fn: (r) => ({ r with name: r.user })) |> group(columns: ["_field", "ip"], mode: "by") ' .
-            '|> limit(n: 1, offset: 0) ';
-
-        $this->assertEquals($expectedQuery, $queryBuilder->build());
-    }
-
     public function testQueryWithWindow()
     {
         $queryBuilder = new QueryBuilder();
@@ -150,59 +187,6 @@ final class QueryBuilderTest extends TestCase
             '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
             '|> filter(fn: (r) => r.count >= 2 and r.count2 >= 3) ' .
             '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> window(every: inf) ';
-
-        $this->assertEquals($expectedQuery, $queryBuilder->build());
-    }
-
-    public function testQueryWithAggregateWindow()
-    {
-        $queryBuilder = new QueryBuilder();
-        $queryBuilder->fromBucket('test_bucket')
-            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
-            ->fromMeasurement('test_measurement')
-            ->addAggregateWindow('20s', 'mean', ['timeDst' => '_time']);
-
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
-            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-            '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") ';
-
-        $this->assertEquals($expectedQuery, $queryBuilder->build());
-    }
-
-    public function testRawQuery()
-    {
-        $queryBuilder = new QueryBuilder();
-        $queryBuilder->fromBucket('test_bucket')
-            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->addReduce(['count' => new MathType('accumulator.count + 1')], ['count' => 0])
-            ->fromMeasurement('test_measurement')
-            ->addRawFunction('|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time")')
-            ->addLimit(50, 100);
-
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
-            '|> reduce(fn: (r, accumulator) => ({count: accumulator.count + 1}), identity: {count: 0}) ' .
-            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-            '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") |> limit(n: 50, offset: 100) ';
-
-        $this->assertEquals($expectedQuery, $queryBuilder->build());
-    }
-
-    public function testQueryWithSum()
-    {
-        $queryBuilder = new QueryBuilder();
-        $queryBuilder->fromBucket('test_bucket')
-            ->addRangeStart(new DateTime('2022-08-12 17:31:00'))
-            ->fromMeasurement('test_measurement')
-            ->addKeyFilter(KeyFilter::setGreaterOrEqualTo('count', 1)->andGreaterOrEqualTo('count2', 2))
-            ->addSum('_value')
-            ->addFieldFilter(['username', 'ip']);
-
-        $expectedQuery = 'from(bucket: "test_bucket") |> range(start: time(v: 2022-08-12T17:31:00Z)) ' .
-            '|> filter(fn: (r) => r._measurement == "test_measurement") ' .
-            '|> filter(fn: (r) => r.count >= 1 and r.count2 >= 2) |> sum(column: "_value") ' .
-            '|> filter(fn: (r) => r._field == "username" or r._field == "ip") ';
 
         $this->assertEquals($expectedQuery, $queryBuilder->build());
     }
