@@ -17,6 +17,7 @@ or [fromBucket()](functions/fromBucket.md)
 or [addRangeInBetween()](functions/addRangeInBetween.md)
 * [addReduce()](functions/addReduce.md)
 * [addSum()](functions/addSum.md)
+* [addLast()](functions/addLast.md)
 
 Anything missing here? You can use this method to add anything to the query:
 * [addRawFunction()](functions/addRawFunction.md)

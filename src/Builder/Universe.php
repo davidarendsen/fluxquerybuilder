@@ -5,6 +5,7 @@ namespace Arendsen\FluxQueryBuilder\Builder;
 use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
 use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
 use Arendsen\FluxQueryBuilder\Functions\Duplicate;
+use Arendsen\FluxQueryBuilder\Functions\Last;
 use Arendsen\FluxQueryBuilder\Functions\Reduce;
 use Arendsen\FluxQueryBuilder\Functions\Sort;
 use Arendsen\FluxQueryBuilder\Functions\Map;
@@ -103,4 +104,12 @@ trait Universe
         );
         return $this;
     }
+
+	public function addLast(string $column = '_value'): QueryBuilderInterface
+	{
+		$this->addToQuery(
+			new Last($column)
+		);
+		return $this;
+	}
 }
