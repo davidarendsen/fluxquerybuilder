@@ -16,6 +16,6 @@ class Last extends Base
 
 	public function __toString()
 	{
-		return '|> last(column: ' . (string)$this->column . ') ';
+		return '|> last(column: "' . (string)$this->column . '") ';
 	}
 }
