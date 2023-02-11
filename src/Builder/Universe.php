@@ -25,7 +25,7 @@ trait Universe
         return $this;
     }
 
-    public function addSort(array $columns, $desc): QueryBuilderInterface
+    public function addSort(array $columns = ['_value'], bool $desc = false): QueryBuilderInterface
     {
         $this->addToQuery(
             new Sort($columns, $desc)

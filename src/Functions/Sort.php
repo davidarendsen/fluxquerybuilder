@@ -16,7 +16,7 @@ class Sort extends Base
      */
     private $desc;
 
-    public function __construct(array $columns, bool $desc = false)
+    public function __construct(array $columns = ['_value'], bool $desc = false)
     {
         $this->columns = $columns;
         $this->desc = $desc;

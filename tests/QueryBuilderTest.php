@@ -113,8 +113,8 @@ final class QueryBuilderTest extends TestCase
             ],
             'addWindow' => [
                 'addWindow',
-                ['20s'],
-                '|> window(every: 20s) '
+                ['20s', ['timeColumn' => '_time']],
+                '|> window(every: 20s, timeColumn: "_time") '
             ],
         ];
     }
