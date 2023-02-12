@@ -41,6 +41,11 @@ final class QueryBuilderTest extends TestCase
                 ['20s', 'mean', ['timeDst' => '_time']],
                 '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") '
             ],
+            'addCount' => [
+                'addCount',
+                ['_value'],
+                '|> count(column: "_value") '
+            ],
             'addDuplicate' => [
                 'addDuplicate',
                 ['old_name', 'new_name'],
@@ -60,6 +65,11 @@ final class QueryBuilderTest extends TestCase
                 'addFieldFilter',
                 [['email', 'username']],
                 '|> filter(fn: (r) => r._field == "email" or r._field == "username") '
+            ],
+            'addFirst' => [
+                'addFirst',
+                ['something'],
+                '|> first(column: "something") '
             ],
             'addGroup' => [
                 'addGroup',
@@ -81,10 +91,20 @@ final class QueryBuilderTest extends TestCase
                 ['r with name: r.user'],
                 '|> map(fn: (r) => ({ r with name: r.user })) '
             ],
+            'addMax' => [
+                'addMax',
+                [],
+                '|> max() '
+            ],
             'addMean' => [
                 'addMean',
-                [],
-                '|> mean() '
+                ['something'],
+                '|> mean(column: "something") '
+            ],
+            'addMin' => [
+                'addMin',
+                ['something'],
+                '|> min(column: "something") '
             ],
             'addRawFunction' => [
                 'addRawFunction',
