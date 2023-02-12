@@ -24,6 +24,7 @@ or [addRangeInBetween()](functions/addRangeInBetween.md)
 * [addReduce()](functions/addReduce.md)
 * [addSort()](functions/addSort.md)
 * [addSum()](functions/addSum.md)
+* [addUnique()](functions/addUnique.md)
 * [addUnwindow()](functions/addUnwindow.md)
 * [addWindow()](functions/addWindow.md)
 

@@ -126,6 +126,11 @@ final class QueryBuilderTest extends TestCase
                 ['something'],
                 '|> sum(column: "something") '
             ],
+            'addUnique' => [
+                'addUnique',
+                ['something'],
+                '|> unique(column: "something") '
+            ],
             'addUnwindow' => [
                 'addUnwindow',
                 [],

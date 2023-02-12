@@ -17,6 +17,7 @@ use Arendsen\FluxQueryBuilder\Functions\Min;
 use Arendsen\FluxQueryBuilder\Functions\Reduce;
 use Arendsen\FluxQueryBuilder\Functions\Sort;
 use Arendsen\FluxQueryBuilder\Functions\Sum;
+use Arendsen\FluxQueryBuilder\Functions\Unique;
 use Arendsen\FluxQueryBuilder\Functions\Window;
 
 trait Universe
@@ -129,6 +130,14 @@ trait Universe
     {
         $this->addToQuery(
             new Sum($column)
+        );
+        return $this;
+    }
+
+    public function addUnique(?string $column = null): QueryBuilderInterface
+    {
+        $this->addToQuery(
+            new Unique($column)
         );
         return $this;
     }
