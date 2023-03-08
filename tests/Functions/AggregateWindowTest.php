@@ -35,8 +35,8 @@ final class AggregateWindowFunctionTest extends TestCase
             ]
         );
 
-        $query = '|> aggregateWindow(every: 20s, period: every, offset: 0s, fn: (r) => r._field == "test", 
-            location: "location", ' . 'column: "_value", timeSrc: "_stop", timeDst: "_time", createEmpty: false) ';
+        $query = '|> aggregateWindow(every: 20s, period: every, offset: 0s, fn: (r) => r._field == "test", ' .
+            'location: "location", ' . 'column: "_value", timeSrc: "_stop", timeDst: "_time", createEmpty: false) ';
 
         $this->assertEquals($query, $expression->__toString());
     }
