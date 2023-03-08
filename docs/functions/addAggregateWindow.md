@@ -89,6 +89,29 @@ This will result in the following Flux function part:
 )
 ```
 
+### Advanced example
+
+```php
+use Arendsen\FluxQueryBuilder\Type\FnType;
+
+->addAggregateWindow(
+  '20s',
+  FnType::params(['column', 'tables=<-'])
+    ->withBody('tables')
+)
+```
+
+This will result in the following Flux function part:
+
+```
+|> aggregateWindow(
+    column: "_value",
+    every: 20s,
+    fn: (column, tables=<-) => tables,
+)
+```
+
+
 ### Extra resources
 
 * [Flux documentation](https://docs.influxdata.com/flux/v0.x/stdlib/universe/aggregatewindow/)
