@@ -4,6 +4,7 @@ namespace Arendsen\FluxQueryBuilder\Functions;
 
 use Arendsen\FluxQueryBuilder\Type;
 use Arendsen\FluxQueryBuilder\Type\ArrayType;
+use Arendsen\FluxQueryBuilder\Type\CustomType;
 use Arendsen\FluxQueryBuilder\Type\DurationType;
 use Arendsen\FluxQueryBuilder\Type\FnType;
 
@@ -37,7 +38,7 @@ class AggregateWindow extends Base
             'every' => new DurationType($this->every),
             'period' => isset($this->options['period']) ? new DurationType($this->options['period']) : null,
             'offset' => isset($this->options['offset']) ? new DurationType($this->options['offset']) : null,
-            'fn' => new FnType($this->fn),
+            'fn' => new CustomType($this->fn),
             'location' => isset($this->options['location']) ? new Type($this->options['location']) : null,
             'column' => isset($this->options['column']) ? new Type($this->options['column']) : null,
             'timeSrc' => isset($this->options['timeSrc']) ? new Type($this->options['timeSrc']) : null,

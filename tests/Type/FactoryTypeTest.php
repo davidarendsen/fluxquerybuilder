@@ -81,12 +81,16 @@ final class FactoryTypeTest extends TestCase
                 'this can be anything'
             ],
             'FnType with only content' => [
-                new FnType('(r) => ({ r with _value: r._value * r._value })'),
-                '(r) => ({ r with _value: r._value * r._value })'
+                FnType::params([])->withBlock('r with _value: r._value * r._value'),
+                '() => { r with _value: r._value * r._value }'
             ],
-            'FnType with params and content' => [
-                new FnType(['r', 'a'], '({ r with _value: r._value * r._value })'),
-                '(r, a) => ({ r with _value: r._value * r._value })'
+            'FnType with params and a body' => [
+                FnType::params(['r'])->withBody('r with _value: r._value * r._value'),
+                '(r) => r with _value: r._value * r._value'
+            ],
+            'FnType with params and a block' => [
+                FnType::params(['r', 'a'])->withBlock('return r with _value: r._value * r._value'),
+                '(r, a) => { return r with _value: r._value * r._value }'
             ],
         ];
     }

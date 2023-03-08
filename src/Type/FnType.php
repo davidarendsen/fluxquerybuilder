@@ -2,30 +2,50 @@
 
 namespace Arendsen\FluxQueryBuilder\Type;
 
+use Arendsen\FluxQueryBuilder\Type;
+
 class FnType implements TypeInterface
 {
     /**
-     * @var mixed $value
+     * @var array $params
      */
-    protected $value;
+    protected $params;
 
     /**
      * @var string $content
      */
     protected $content;
 
-    public function __construct($value, string $content = '')
+    private function __construct(array $params)
     {
-        $this->value = $value;
+        $this->params = $params;
+    }
+
+    public static function params(array $params)
+    {
+        return new self($params);
+    }
+
+    public function withBody(string $content)
+    {
         $this->content = $content;
+        return $this;
+    }
+
+    public function withBlock(string $content)
+    {
+        $this->content = '{ ' . $content . ' }';
+        return $this;
     }
 
     public function __toString(): string
     {
-        if (is_string($this->value)) {
-            return $this->value;
-        }
+        array_walk($this->params, function (&$value, $key) {
+            if (is_string($key)) {
+                $value = $key . ' = ' . new Type($value);
+            }
+        });
 
-        return '(' . implode(', ', $this->value) . ') => ' . $this->content;
+        return '(' . implode(', ', $this->params) . ') => ' . $this->content;
     }
 }
