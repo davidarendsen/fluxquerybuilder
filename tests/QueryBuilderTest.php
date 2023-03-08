@@ -41,6 +41,11 @@ final class QueryBuilderTest extends TestCase
                 ['20s', 'mean', ['timeDst' => '_time']],
                 '|> aggregateWindow(every: 20s, fn: mean, timeDst: "_time") '
             ],
+            'addBottom' => [
+                'addBottom',
+                [2, ['_value']],
+                '|> bottom(n: 2, columns: ["_value"]) '
+            ],
             'addCount' => [
                 'addCount',
                 ['_value'],

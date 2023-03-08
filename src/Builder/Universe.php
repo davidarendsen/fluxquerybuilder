@@ -4,6 +4,7 @@ namespace Arendsen\FluxQueryBuilder\Builder;
 
 use Arendsen\FluxQueryBuilder\Builder\QueryBuilderInterface;
 use Arendsen\FluxQueryBuilder\Functions\AggregateWindow;
+use Arendsen\FluxQueryBuilder\Functions\Bottom;
 use Arendsen\FluxQueryBuilder\Functions\Count;
 use Arendsen\FluxQueryBuilder\Functions\Duplicate;
 use Arendsen\FluxQueryBuilder\Functions\First;
@@ -27,6 +28,12 @@ trait Universe
         $this->addToQuery(
             new AggregateWindow($every, $fn, $options)
         );
+        return $this;
+    }
+
+    public function addBottom(int $n, array $columns = []): QueryBuilderInterface
+    {
+        $this->addToQuery(new Bottom($n, $columns));
         return $this;
     }
 

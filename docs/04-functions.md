@@ -8,6 +8,7 @@ On this page you will find the methods you can use in the query builder.
 or [fromBucket()](functions/fromBucket.md)
 * [fromMeasurement()](functions/fromMeasurement.md)
 * [addAggregateWindow()](functions/addAggregateWindow.md)
+* [addBottom()](functions/addBottom.md)
 * [addCount()](functions/addCount.md)
 * [addDuplicate()](functions/addDuplicate.md)
 * [addFieldFilter()](functions/addFieldFilter.md)
