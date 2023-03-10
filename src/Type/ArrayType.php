@@ -7,43 +7,27 @@ use Arendsen\FluxQueryBuilder\Type;
 
 class ArrayType implements TypeInterface
 {
-    public const SETTING_IS_NESTED_ARRAY = 'isNestedArray';
-
     /**
      * @var array $value
      */
     protected $value;
 
-    /**
-     * @var Settings|null $settings
-     */
-    protected $settings;
-
-    public function __construct(array $value, Settings $settings = null)
+    public function __construct(array $value)
     {
         $this->value = $value;
-        $this->settings = $settings ? $settings : Settings::set([]);
     }
 
     public function __toString(): string
     {
-        if ($this->settings->get(RecordType::SETTING_IS_RECORD)) {
-            return new RecordType($this->value);
-        }
-
         array_walk($this->value, function (&$value, $key) {
             if ($this->isAssociativeArray($key)) {
-                $value = $key . ': ' . new Type($value, Settings::set([
-                    self::SETTING_IS_NESTED_ARRAY => is_array($value)
-                ]));
+                $value = $key . ': ' . $this->getPrefix($value) . new Type($value) . $this->getSuffix($value);
             } else {
-                $value = new Type($value, Settings::set([
-                    self::SETTING_IS_NESTED_ARRAY => is_array($value)
-                ]));
+                $value = $this->getPrefix($value) . new Type($value) . $this->getSuffix($value);
             }
         });
 
-        return $this->getPrefix() . implode(', ', $this->value) . $this->getSuffix();
+        return implode(', ', $this->value);
     }
 
     protected function isAssociativeArray($key): bool
@@ -51,18 +35,13 @@ class ArrayType implements TypeInterface
         return is_string($key);
     }
 
-    protected function isNestedArray(): bool
+    protected function getPrefix($value): string
     {
-        return $this->settings->get(self::SETTING_IS_NESTED_ARRAY) ? true : false;
+        return is_array($value) ? '[' : '';
     }
 
-    protected function getPrefix(): string
+    protected function getSuffix($value): string
     {
-        return $this->isNestedArray() ? '[' : '';
-    }
-
-    protected function getSuffix(): string
-    {
-        return $this->isNestedArray() ? ']' : '';
+        return is_array($value) ? ']' : '';
     }
 }

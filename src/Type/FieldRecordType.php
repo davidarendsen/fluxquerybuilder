@@ -9,6 +9,11 @@ class FieldRecordType implements TypeInterface
 {
     public const SETTING_IS_RECORD = 'isRecord';
 
+    /**
+     * @var array $value
+     */
+    private $value;
+
     public function __construct(array $value)
     {
         $this->value = $value;

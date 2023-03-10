@@ -2,6 +2,7 @@
 
 namespace Arendsen\FluxQueryBuilder;
 
+use Arendsen\FluxQueryBuilder\Type\TypeInterface;
 use Arendsen\FluxQueryBuilder\Type\ArrayType;
 use Arendsen\FluxQueryBuilder\Type\BooleanType;
 use Arendsen\FluxQueryBuilder\Type\TimeType;
@@ -14,15 +15,9 @@ class Type
      */
     protected $value;
 
-    /**
-     * @var Settings|null $settings
-     */
-    protected $settings;
-
-    public function __construct($value, Settings $settings = null)
+    public function __construct($value)
     {
         $this->value = $value;
-        $this->settings = $settings ? $settings : Settings::set([]);
     }
 
     public function __toString(): string
@@ -38,7 +33,7 @@ class Type
             case 'boolean':
                 return new BooleanType($this->value);
             case 'array':
-                return new ArrayType($this->value, $this->settings);
+                return new ArrayType($this->value);
             case 'NULL':
                 return 'null';
             default:

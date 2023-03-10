@@ -2,12 +2,14 @@
 
 namespace Arendsen\FluxQueryBuilder\Type;
 
-use Arendsen\FluxQueryBuilder\Settings;
 use Arendsen\FluxQueryBuilder\Type;
 
 class RecordType implements TypeInterface
 {
-    public const SETTING_IS_RECORD = 'isRecord';
+    /**
+     * @var array $value
+     */
+    private $value;
 
     public function __construct(array $value)
     {
@@ -17,17 +19,18 @@ class RecordType implements TypeInterface
     public function __toString(): string
     {
         array_walk($this->value, function (&$value, $key) {
-            if (is_string($key)) {
-                $value = $key . ': ' . new Type($value, Settings::set([
-                    self::SETTING_IS_RECORD => true,
-                ]));
+            if (is_array($value)) {
+                $value = $this->getPrefix($key) . new RecordType($value);
             } else {
-                $value = new Type($value, Settings::set([
-                    self::SETTING_IS_RECORD => true,
-                ]));
+                $value = $this->getPrefix($key) . new Type($value);
             }
         });
 
         return '{' . implode(', ', $this->value) . '}';
+    }
+
+    private function getPrefix($key): string
+    {
+        return is_string($key) ? $key . ': ' : '';
     }
 }
